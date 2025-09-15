@@ -1,0 +1,567 @@
+********************************************************************************
+Probe Values Report, written on Mon Jun 13 12:25:59 2022
+
+Source
+-------
+
+   ODB: C:/Users/NSGALL~1/AppData/Local/Temp/S2_4P_LatSlide_NoTether1655144623.543.odb
+   Step: Load1
+   Frame: Increment      0: Step Time =    0.000
+   Variable: S, Mises (Not averaged)
+
+Loc 1 : Centroidal values
+
+Probe values reported at element centroid
+
+  Part Instance  Element ID        Type  Attached nodes
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8       33611       33626       33631       33616       33612       33627       33632       33617
+    PART-1-1       72329        C3D8       81477       81492       81497       81482       81478       81493       81498       81483
+
+
+  Part Instance  Element ID        Type         S, Mises
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8      114.071E-03
+    PART-1-1       72329        C3D8      73.4484E-03
+
+
+********************************************************************************
+Probe Values Report, written on Mon Jun 13 12:26:12 2022
+
+Source
+-------
+
+   ODB: C:/Users/NSGALL~1/AppData/Local/Temp/S2_4P_LatSlide_NoTether1655144623.543.odb
+   Step: Load1
+   Frame: Increment     20: Step Time =   6.9261E-02
+   Variable: S, Mises (Not averaged)
+
+Loc 1 : Centroidal values
+
+Probe values reported at element centroid
+
+  Part Instance  Element ID        Type  Attached nodes
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8       33611       33626       33631       33616       33612       33627       33632       33617
+    PART-1-1       72329        C3D8       81477       81492       81497       81482       81478       81493       81498       81483
+
+
+  Part Instance  Element ID        Type         S, Mises
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8      250.744E-03
+    PART-1-1       72329        C3D8      194.126E-03
+
+
+********************************************************************************
+Probe Values Report, written on Mon Jun 13 12:26:22 2022
+
+Source
+-------
+
+   ODB: C:/Users/NSGALL~1/AppData/Local/Temp/S2_4P_LatSlide_NoTether1655144623.543.odb
+   Step: Load1
+   Frame: Increment     21: Step Time =   0.1039
+   Variable: S, Mises (Not averaged)
+
+Loc 1 : Centroidal values
+
+Probe values reported at element centroid
+
+  Part Instance  Element ID        Type  Attached nodes
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8       33611       33626       33631       33616       33612       33627       33632       33617
+    PART-1-1       72329        C3D8       81477       81492       81497       81482       81478       81493       81498       81483
+
+
+  Part Instance  Element ID        Type         S, Mises
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8      261.885E-03
+    PART-1-1       72329        C3D8      208.826E-03
+
+
+********************************************************************************
+Probe Values Report, written on Mon Jun 13 12:26:30 2022
+
+Source
+-------
+
+   ODB: C:/Users/NSGALL~1/AppData/Local/Temp/S2_4P_LatSlide_NoTether1655144623.543.odb
+   Step: Load1
+   Frame: Increment     24: Step Time =   0.1633
+   Variable: S, Mises (Not averaged)
+
+Loc 1 : Centroidal values
+
+Probe values reported at element centroid
+
+  Part Instance  Element ID        Type  Attached nodes
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8       33611       33626       33631       33616       33612       33627       33632       33617
+    PART-1-1       72329        C3D8       81477       81492       81497       81482       81478       81493       81498       81483
+
+
+  Part Instance  Element ID        Type         S, Mises
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8      282.504E-03
+    PART-1-1       72329        C3D8      235.763E-03
+
+
+********************************************************************************
+Probe Values Report, written on Mon Jun 13 12:26:39 2022
+
+Source
+-------
+
+   ODB: C:/Users/NSGALL~1/AppData/Local/Temp/S2_4P_LatSlide_NoTether1655144623.543.odb
+   Step: Load1
+   Frame: Increment     25: Step Time =   0.2055
+   Variable: S, Mises (Not averaged)
+
+Loc 1 : Centroidal values
+
+Probe values reported at element centroid
+
+  Part Instance  Element ID        Type  Attached nodes
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8       33611       33626       33631       33616       33612       33627       33632       33617
+    PART-1-1       72329        C3D8       81477       81492       81497       81482       81478       81493       81498       81483
+
+
+  Part Instance  Element ID        Type         S, Mises
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8      298.297E-03
+    PART-1-1       72329        C3D8      254.556E-03
+
+
+********************************************************************************
+Probe Values Report, written on Mon Jun 13 12:26:48 2022
+
+Source
+-------
+
+   ODB: C:/Users/NSGALL~1/AppData/Local/Temp/S2_4P_LatSlide_NoTether1655144623.543.odb
+   Step: Load1
+   Frame: Increment     29: Step Time =   0.2543
+   Variable: S, Mises (Not averaged)
+
+Loc 1 : Centroidal values
+
+Probe values reported at element centroid
+
+  Part Instance  Element ID        Type  Attached nodes
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8       33611       33626       33631       33616       33612       33627       33632       33617
+    PART-1-1       72329        C3D8       81477       81492       81497       81482       81478       81493       81498       81483
+
+
+  Part Instance  Element ID        Type         S, Mises
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8      317.011E-03
+    PART-1-1       72329        C3D8      278.544E-03
+
+
+********************************************************************************
+Probe Values Report, written on Mon Jun 13 12:26:56 2022
+
+Source
+-------
+
+   ODB: C:/Users/NSGALL~1/AppData/Local/Temp/S2_4P_LatSlide_NoTether1655144623.543.odb
+   Step: Load1
+   Frame: Increment     35: Step Time =   0.3008
+   Variable: S, Mises (Not averaged)
+
+Loc 1 : Centroidal values
+
+Probe values reported at element centroid
+
+  Part Instance  Element ID        Type  Attached nodes
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8       33611       33626       33631       33616       33612       33627       33632       33617
+    PART-1-1       72329        C3D8       81477       81492       81497       81482       81478       81493       81498       81483
+
+
+  Part Instance  Element ID        Type         S, Mises
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8      335.008E-03
+    PART-1-1       72329        C3D8      301.404E-03
+
+
+********************************************************************************
+Probe Values Report, written on Mon Jun 13 12:27:06 2022
+
+Source
+-------
+
+   ODB: C:/Users/NSGALL~1/AppData/Local/Temp/S2_4P_LatSlide_NoTether1655144623.543.odb
+   Step: Load1
+   Frame: Increment     38: Step Time =   0.3543
+   Variable: S, Mises (Not averaged)
+
+Loc 1 : Centroidal values
+
+Probe values reported at element centroid
+
+  Part Instance  Element ID        Type  Attached nodes
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8       33611       33626       33631       33616       33612       33627       33632       33617
+    PART-1-1       72329        C3D8       81477       81492       81497       81482       81478       81493       81498       81483
+
+
+  Part Instance  Element ID        Type         S, Mises
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8      355.808E-03
+    PART-1-1       72329        C3D8      326.179E-03
+
+
+********************************************************************************
+Probe Values Report, written on Mon Jun 13 12:27:15 2022
+
+Source
+-------
+
+   ODB: C:/Users/NSGALL~1/AppData/Local/Temp/S2_4P_LatSlide_NoTether1655144623.543.odb
+   Step: Load1
+   Frame: Increment     42: Step Time =   0.4315
+   Variable: S, Mises (Not averaged)
+
+Loc 1 : Centroidal values
+
+Probe values reported at element centroid
+
+  Part Instance  Element ID        Type  Attached nodes
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8       33611       33626       33631       33616       33612       33627       33632       33617
+    PART-1-1       72329        C3D8       81477       81492       81497       81482       81478       81493       81498       81483
+
+
+  Part Instance  Element ID        Type         S, Mises
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8      385.559E-03
+    PART-1-1       72329        C3D8      359.129E-03
+
+
+********************************************************************************
+Probe Values Report, written on Mon Jun 13 12:27:22 2022
+
+Source
+-------
+
+   ODB: C:/Users/NSGALL~1/AppData/Local/Temp/S2_4P_LatSlide_NoTether1655144623.543.odb
+   Step: Load1
+   Frame: Increment     44: Step Time =   0.4616
+   Variable: S, Mises (Not averaged)
+
+Loc 1 : Centroidal values
+
+Probe values reported at element centroid
+
+  Part Instance  Element ID        Type  Attached nodes
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8       33611       33626       33631       33616       33612       33627       33632       33617
+    PART-1-1       72329        C3D8       81477       81492       81497       81482       81478       81493       81498       81483
+
+
+  Part Instance  Element ID        Type         S, Mises
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8      396.981E-03
+    PART-1-1       72329        C3D8      371.383E-03
+
+
+********************************************************************************
+Probe Values Report, written on Mon Jun 13 12:27:31 2022
+
+Source
+-------
+
+   ODB: C:/Users/NSGALL~1/AppData/Local/Temp/S2_4P_LatSlide_NoTether1655144623.543.odb
+   Step: Load1
+   Frame: Increment     47: Step Time =   0.5140
+   Variable: S, Mises (Not averaged)
+
+Loc 1 : Centroidal values
+
+Probe values reported at element centroid
+
+  Part Instance  Element ID        Type  Attached nodes
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8       33611       33626       33631       33616       33612       33627       33632       33617
+    PART-1-1       72329        C3D8       81477       81492       81497       81482       81478       81493       81498       81483
+
+
+  Part Instance  Element ID        Type         S, Mises
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8      416.638E-03
+    PART-1-1       72329        C3D8      392.187E-03
+
+
+********************************************************************************
+Probe Values Report, written on Mon Jun 13 12:27:39 2022
+
+Source
+-------
+
+   ODB: C:/Users/NSGALL~1/AppData/Local/Temp/S2_4P_LatSlide_NoTether1655144623.543.odb
+   Step: Load1
+   Frame: Increment     51: Step Time =   0.5604
+   Variable: S, Mises (Not averaged)
+
+Loc 1 : Centroidal values
+
+Probe values reported at element centroid
+
+  Part Instance  Element ID        Type  Attached nodes
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8       33611       33626       33631       33616       33612       33627       33632       33617
+    PART-1-1       72329        C3D8       81477       81492       81497       81482       81478       81493       81498       81483
+
+
+  Part Instance  Element ID        Type         S, Mises
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8       434.21E-03
+    PART-1-1       72329        C3D8      409.954E-03
+
+
+********************************************************************************
+Probe Values Report, written on Mon Jun 13 12:27:46 2022
+
+Source
+-------
+
+   ODB: C:/Users/NSGALL~1/AppData/Local/Temp/S2_4P_LatSlide_NoTether1655144623.543.odb
+   Step: Load1
+   Frame: Increment     55: Step Time =   0.6008
+   Variable: S, Mises (Not averaged)
+
+Loc 1 : Centroidal values
+
+Probe values reported at element centroid
+
+  Part Instance  Element ID        Type  Attached nodes
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8       33611       33626       33631       33616       33612       33627       33632       33617
+    PART-1-1       72329        C3D8       81477       81492       81497       81482       81478       81493       81498       81483
+
+
+  Part Instance  Element ID        Type         S, Mises
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8      449.223E-03
+    PART-1-1       72329        C3D8      424.884E-03
+
+
+********************************************************************************
+Probe Values Report, written on Mon Jun 13 12:27:55 2022
+
+Source
+-------
+
+   ODB: C:/Users/NSGALL~1/AppData/Local/Temp/S2_4P_LatSlide_NoTether1655144623.543.odb
+   Step: Load1
+   Frame: Increment     59: Step Time =   0.6519
+   Variable: S, Mises (Not averaged)
+
+Loc 1 : Centroidal values
+
+Probe values reported at element centroid
+
+  Part Instance  Element ID        Type  Attached nodes
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8       33611       33626       33631       33616       33612       33627       33632       33617
+    PART-1-1       72329        C3D8       81477       81492       81497       81482       81478       81493       81498       81483
+
+
+  Part Instance  Element ID        Type         S, Mises
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8      467.724E-03
+    PART-1-1       72329        C3D8      443.463E-03
+
+
+********************************************************************************
+Probe Values Report, written on Mon Jun 13 12:28:04 2022
+
+Source
+-------
+
+   ODB: C:/Users/NSGALL~1/AppData/Local/Temp/S2_4P_LatSlide_NoTether1655144623.543.odb
+   Step: Load1
+   Frame: Increment     66: Step Time =   0.7072
+   Variable: S, Mises (Not averaged)
+
+Loc 1 : Centroidal values
+
+Probe values reported at element centroid
+
+  Part Instance  Element ID        Type  Attached nodes
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8       33611       33626       33631       33616       33612       33627       33632       33617
+    PART-1-1       72329        C3D8       81477       81492       81497       81482       81478       81493       81498       81483
+
+
+  Part Instance  Element ID        Type         S, Mises
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8      486.925E-03
+    PART-1-1       72329        C3D8      463.021E-03
+
+
+********************************************************************************
+Probe Values Report, written on Mon Jun 13 12:28:12 2022
+
+Source
+-------
+
+   ODB: C:/Users/NSGALL~1/AppData/Local/Temp/S2_4P_LatSlide_NoTether1655144623.543.odb
+   Step: Load1
+   Frame: Increment     72: Step Time =   0.7514
+   Variable: S, Mises (Not averaged)
+
+Loc 1 : Centroidal values
+
+Probe values reported at element centroid
+
+  Part Instance  Element ID        Type  Attached nodes
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8       33611       33626       33631       33616       33612       33627       33632       33617
+    PART-1-1       72329        C3D8       81477       81492       81497       81482       81478       81493       81498       81483
+
+
+  Part Instance  Element ID        Type         S, Mises
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8      501.575E-03
+    PART-1-1       72329        C3D8      478.127E-03
+
+
+********************************************************************************
+Probe Values Report, written on Mon Jun 13 12:28:19 2022
+
+Source
+-------
+
+   ODB: C:/Users/NSGALL~1/AppData/Local/Temp/S2_4P_LatSlide_NoTether1655144623.543.odb
+   Step: Load1
+   Frame: Increment     78: Step Time =   0.8037
+   Variable: S, Mises (Not averaged)
+
+Loc 1 : Centroidal values
+
+Probe values reported at element centroid
+
+  Part Instance  Element ID        Type  Attached nodes
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8       33611       33626       33631       33616       33612       33627       33632       33617
+    PART-1-1       72329        C3D8       81477       81492       81497       81482       81478       81493       81498       81483
+
+
+  Part Instance  Element ID        Type         S, Mises
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8      518.152E-03
+    PART-1-1       72329        C3D8      495.176E-03
+
+
+********************************************************************************
+Probe Values Report, written on Mon Jun 13 12:28:28 2022
+
+Source
+-------
+
+   ODB: C:/Users/NSGALL~1/AppData/Local/Temp/S2_4P_LatSlide_NoTether1655144623.543.odb
+   Step: Load1
+   Frame: Increment     82: Step Time =   0.8545
+   Variable: S, Mises (Not averaged)
+
+Loc 1 : Centroidal values
+
+Probe values reported at element centroid
+
+  Part Instance  Element ID        Type  Attached nodes
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8       33611       33626       33631       33616       33612       33627       33632       33617
+    PART-1-1       72329        C3D8       81477       81492       81497       81482       81478       81493       81498       81483
+
+
+  Part Instance  Element ID        Type         S, Mises
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8       533.36E-03
+    PART-1-1       72329        C3D8      510.903E-03
+
+
+********************************************************************************
+Probe Values Report, written on Mon Jun 13 12:28:36 2022
+
+Source
+-------
+
+   ODB: C:/Users/NSGALL~1/AppData/Local/Temp/S2_4P_LatSlide_NoTether1655144623.543.odb
+   Step: Load1
+   Frame: Increment     86: Step Time =   0.9189
+   Variable: S, Mises (Not averaged)
+
+Loc 1 : Centroidal values
+
+Probe values reported at element centroid
+
+  Part Instance  Element ID        Type  Attached nodes
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8       33611       33626       33631       33616       33612       33627       33632       33617
+    PART-1-1       72329        C3D8       81477       81492       81497       81482       81478       81493       81498       81483
+
+
+  Part Instance  Element ID        Type         S, Mises
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8      551.738E-03
+    PART-1-1       72329        C3D8      529.588E-03
+
+
+********************************************************************************
+Probe Values Report, written on Mon Jun 13 12:28:45 2022
+
+Source
+-------
+
+   ODB: C:/Users/NSGALL~1/AppData/Local/Temp/S2_4P_LatSlide_NoTether1655144623.543.odb
+   Step: Load1
+   Frame: Increment     90: Step Time =   0.9581
+   Variable: S, Mises (Not averaged)
+
+Loc 1 : Centroidal values
+
+Probe values reported at element centroid
+
+  Part Instance  Element ID        Type  Attached nodes
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8       33611       33626       33631       33616       33612       33627       33632       33617
+    PART-1-1       72329        C3D8       81477       81492       81497       81482       81478       81493       81498       81483
+
+
+  Part Instance  Element ID        Type         S, Mises
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8      562.347E-03
+    PART-1-1       72329        C3D8        540.3E-03
+
+
+********************************************************************************
+Probe Values Report, written on Mon Jun 13 12:28:53 2022
+
+Source
+-------
+
+   ODB: C:/Users/NSGALL~1/AppData/Local/Temp/S2_4P_LatSlide_NoTether1655144623.543.odb
+   Step: Load1
+   Frame: Increment     93: Step Time =    1.000
+   Variable: S, Mises (Not averaged)
+
+Loc 1 : Centroidal values
+
+Probe values reported at element centroid
+
+  Part Instance  Element ID        Type  Attached nodes
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8       33611       33626       33631       33616       33612       33627       33632       33617
+    PART-1-1       72329        C3D8       81477       81492       81497       81482       81478       81493       81498       81483
+
+
+  Part Instance  Element ID        Type         S, Mises
+--------------------------------------------------------------------------------
+    PART-1-1       29175        C3D8      573.115E-03
+    PART-1-1       72329        C3D8      551.159E-03
+
+

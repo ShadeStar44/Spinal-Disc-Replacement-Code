@@ -1,0 +1,70 @@
+% This script modifies the Abaqus txt files for spatial displacements
+% related to foramen narrowing and widening for 4N Models at C3/C4. 
+
+% LEFT 4N : 1297, 16439, 17116, 14886
+clear,clc
+% 1297 Modify SlideSlide_Teth and save 
+FID=fopen('SlideSlide_Teth_1297_4n.txt');
+datacell = textscan(FID, '%f%f%f%f', 'HeaderLines', 3, 'CollectOutput', 1);
+fclose(FID);
+A = datacell{1};
+SlideSlide_Teth_1297_4n = [A(:,2)'; A(:,3)'; A(:,4)']; % Good 
+save('SlideSlide_Teth_1297_4n_mat', 'SlideSlide_Teth_1297_4n', '-ascii');% Good 
+
+% 16439 Modify SlideSlide_Teth and save 
+FID=fopen('SlideSlide_Teth_16439_4n.txt');
+datacell = textscan(FID, '%f%f%f%f', 'HeaderLines', 3, 'CollectOutput', 1);
+fclose(FID);
+A1 = datacell{1};
+SlideSlide_Teth_16439_4n = [A1(:,2)'; A1(:,3)'; A1(:,4)']; 
+save('SlideSlide_Teth_16439_4n_mat', 'SlideSlide_Teth_16439_4n', '-ascii'); 
+
+% 17116 Modify SlideSlide_Teth and save 
+FID=fopen('SlideSlide_Teth_17116_4n.txt');
+datacell = textscan(FID, '%f%f%f%f', 'HeaderLines', 3, 'CollectOutput', 1);
+fclose(FID);
+A2 = datacell{1};
+SlideSlide_Teth_17116_4n = [A2(:,2)'; A2(:,3)'; A2(:,4)']; 
+save('SlideSlide_Teth_17116_4n_mat', 'SlideSlide_Teth_17116_4n', '-ascii'); 
+
+% 14886 Modify SlideSlide_Teth and save
+FID=fopen('SlideSlide_Teth_14886_4n.txt');
+datacell = textscan(FID, '%f%f%f%f', 'HeaderLines', 3, 'CollectOutput', 1);
+fclose(FID);
+A3 = datacell{1};
+SlideSlide_Teth_14886_4n = [A3(:,2)'; A3(:,3)'; A3(:,4)']; 
+save('SlideSlide_Teth_14886_4n_mat', 'SlideSlide_Teth_14886_4n', '-ascii');
+
+% RIGHT 4N: 4457, 20101, 9037, 21922
+
+% 4457 Modify SlideSlide_Teth and save
+FID=fopen('SlideSlide_Teth_4457_4n.txt');
+datacell = textscan(FID, '%f%f%f%f', 'HeaderLines', 3, 'CollectOutput', 1);
+fclose(FID);
+A4 = datacell{1};
+SlideSlide_Teth_4457_4n = [A4(:,2)'; A4(:,3)'; A4(:,4)']; 
+save('SlideSlide_Teth_4457_4n_mat', 'SlideSlide_Teth_4457_4n', '-ascii');
+
+% 20101 Modify SlideSlide_Teth and save 
+FID=fopen('SlideSlide_Teth_20101_4n.txt');
+datacell = textscan(FID, '%f%f%f%f', 'HeaderLines', 3, 'CollectOutput', 1);
+fclose(FID);
+A5 = datacell{1};
+SlideSlide_Teth_20101_4n = [A5(:,2)'; A5(:,3)'; A5(:,4)']; 
+save('SlideSlide_Teth_20101_4n_mat', 'SlideSlide_Teth_20101_4n', '-ascii');
+
+% 9037 Modify SlideSlide_Teth and save
+FID=fopen('SlideSlide_Teth_9037_4n.txt');
+datacell = textscan(FID, '%f%f%f%f', 'HeaderLines', 3, 'CollectOutput', 1);
+fclose(FID);
+A6 = datacell{1};
+SlideSlide_Teth_9037_4n = [A6(:,2)'; A6(:,3)'; A6(:,4)']; 
+save('SlideSlide_Teth_9037_4n_mat', 'SlideSlide_Teth_9037_4n', '-ascii');
+
+% 21922 Modify SlideSlide_Teth and save 
+FID=fopen('SlideSlide_Teth_21922_4n.txt');
+datacell = textscan(FID, '%f%f%f%f', 'HeaderLines', 3, 'CollectOutput', 1);
+fclose(FID);
+A7 = datacell{1};
+SlideSlide_Teth_21922_4n = [A7(:,2)'; A7(:,3)'; A7(:,4)']; 
+save('SlideSlide_Teth_21922_4n_mat', 'SlideSlide_Teth_21922_4n', '-ascii');

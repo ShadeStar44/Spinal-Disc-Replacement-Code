@@ -1,0 +1,203 @@
+from abaqus import *
+from abaqusConstants import *
+
+
+odbName = 'S2_4N_APSlide_NoTether'
+odb = openOdb(odbName + '.odb', readOnly = False)
+session.viewports['Viewport: 1'].setValues(displayedObject=Odb)
+
+frames = Odb.steps['Spread'].frames
+numFrames = len(frames)
+
+myInstance = odb.rootAssembly.instances['PART-3-1']
+numNodes = len(myInstance.nodes)
+numElements = len(myInstance.elements)
+el = 2
+
+for el in range(0,numNodes):
+   
+Stress=odb.steps['Spread'].frames[fr].fieldOutputs['U'].getSubset(region=myInstance.Nodes[el],position=CENTROID, elementType='C3D8H').values
+   sz = len(Stress)
+   for ip in range(0,sz):
+      Sxx = Stress[ip].data[0]
+      Syy = Stress[ip].data[1]
+      Szz = Stress[ip].data[2]
+      Sxy = Stress[ip].data[3]
+      Sxz = Stress[ip].data[4]
+      Syz = Stress[ip].data[5]
+
+
+
+lastFrame = odb.steps['Load1'].frames[-1]
+
+for fieldName in lastFrame.fieldOutputs.keys():
+    print fieldName
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+import csv
+import sys
+from odbAccess import *
+from abaqusConstants import *
+
+odbName = 'S2_4N_APSlide_NoTether'
+odb = openOdb(odbName + '.odb', readOnly = False)
+annDefl=odb.steps['Load1'].frames[-1].fieldOutputs['U'].values
+annDeflPre=odb.steps['Load1'].frames[0].fieldOutputs['U'].values
+
+for v in annDefl:
+    print 'Node = %d U[x] = %6.4f, U[y] = %6.4f' % (v.nodeLabel,
+    v.data[0], v.data[1], v.data[2])
+
+
+for v in annDeflPre:
+    print 'Node = %d U[x] = %6.4f, U[y] = %6.4f' % (v.nodeLabel,
+    v.data[0], v.data[1], v.data[2])
+
+c = csv.write(open("AnnularBulge.csv", dialect='excel')) #creating csv file with values
+
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+for f in lastFrame.fieldOutputs.values():
+    print f.name, ':', f.description
+    print 'Type: ', f.type
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+nodeID = 106434
+
+myInstance = odb.rootAssembly.instances['PART-1-1']
+numNodes = len(myInstance.nodes)
+for nodeID in range(0,numNodes):
+	Defl=odb.steps['Load1'].frames[-1].fieldOutputs['U'].getSubset(region=myInstance.nodes[nodeID]).values
+
+	sz = len(Defl)
+	for ip in range(0,sz):
+		print Defl[ip].data[0]
+		print Defl[ip].data[1]
+		print Defl[ip].data[2]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+import sys
+from odbAccess import *
+from abaqusConstants import *
+
+odbName = 'S2_4N_APSlide_NoTether'
+odb = openOdb(odbName + '.odb', readOnly = False)
+nodeID = 34092
+
+myInstance = odb.rootAssembly.instances['PART-1-1']
+numNodes = len(myInstance.nodes)
+
+Defl=odb.steps['Load1'].frames[0].fieldOutputs['U'].values.keys()
+
+sz = len(Defl)
+for ip in range(0,sz):
+	print Defl[ip].data[0]
+	print Defl[ip].data[1]
+	print Defl[ip].data[2]
+
+odb.steps['Load1'].historyRegions[''].historyOutput['U2'].data
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+import csv
+import sys
+from odbAccess import *
+from abaqusConstants import *
+
+odbName = 'S2_4N_APSlide_NoTether'
+odb = openOdb(odbName + '.odb', readOnly = False)
+annDefl=odb.steps['Load1'].frames[-1].fieldOutputs['U'].values
+annDeflPre=odb.steps['Load1'].frames[0].fieldOutputs['U'].values
+
+for v in annDefl:
+    print 'Node = %d U[x] = %6.4f, U[y] = %6.4f' % (v.nodeLabel,
+    v.data[0], v.data[1], v.data[2])
+
+
+for v in annDeflPre:
+    print 'Node = %d U[x] = %6.4f, U[y] = %6.4f' % (v.nodeLabel,
+    v.data[0], v.data[1], v.data[2])
+
+c = csv.write(open("AnnularBulge.csv", dialect='excel')) #creating csv file with values
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+import sys
+from odbAccess import *
+from abaqusConstants import *
+
+odbName = 'S2_4N_APSlide_NoTether'
+myInstance = odb.rootAssembly.instances['PART-1-1']
+odb = openOdb(odbName + '.odb', readOnly = False)
+print odb.steps['Load1'].frames[-1].fieldOutputs['U'].getSubset(region=myInstance.nodes[106433],position=CENTROID, elementType='C3D8H').values
+
+
+CAREA = odb.steps['Heat'].historyRegions['NodeSet  Z000001'].historyOutputs['CAREA    ASSEMBLY_PART-1-1_FS-C3LL/ASSEMBLY_PART-1-1_FS-C4UL'].data
+sum(CAREA)/len(CAREA)
+
+odb.rootAssembly.instances[ 'PART-3-1'].nodes[
+odb.rootAssembly.instances[ 'PART-3-1'].nodes[-1]
+
+
+
+import sys
+from odbAccess import *
+from abaqusConstants import *
+
+odbName = 'S2_4N_APSlide_NoTether'
+bulge = openOdb(odbName + '.odb', readOnly = False)
+deflection= bulge.steps['Load1'].frames[0].fieldOutputs['U']
+U = deflection
+print U.values[0]
+myInstance = bulge.rootAssembly.instances['PART-1-1']
+numNodes = len(myInstance.nodes)
+nodeID = 106433
+for nodeID in range(0,numNodes):
+	deflection=bulge.steps['Load1'].frames[0].fieldOutputs['U'].getSubset(region=myInstance.elements[nodeID],position=CENTROID, elementType='C3D8H').values
+
+
+
+import sys
+from abaqus import *
+odbName = 'TLC_Pre_26-1_Segmental'
+odb = openOdb(odbName + '.odb', readOnly = False)
+
+print odb.rootAssembly.instances.__members__
+print odb.rootAssembly.instances.keys()
+
+part3 = odb.rootAssembly.instances['PART-3-1']
+len(part3.nodes) //length of nodes array
+
+
+print odb.steps.keys()
+odb.steps['Heat'].historyRegions['NodeSet  Z000001'].historyOutputs['CAREA    ASSEMBLY_PART-1-1_FS-C3LL/ASSEMBLY_PART-1-1_FS-C4UL'].data
+sum(CAREA)/len(CAREA)
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+import sys
+from odbAccess import *
+from abaqusConstants import *
+
+odbName = 'S2_4N_SlideSlide_Tether'
+odb = openOdb(odbName + '.odb', readOnly = False)
+print odb.steps['Load1'].frames[-1].fieldOutputs
+
+myInstance = odb.rootAssembly.instances['PART-1-1']
+numNodes = len(myInstance.nodes)
+Defl_last=odb.steps['Load1'].frames[-1].fieldOutputs['U'].values
+
+#nodeID = 1
+#for nodeID in range(0,numNodes):
+Defl_last=odb.steps['Load1'].frames[-1].fieldOutputs['U'].values
+print Defl_last
+n = len(Defl_last)
+for i in range(0,n):
+	print Defl_last[i].data[1]
+		
+
+Defl_last=odb.steps['Load1'].frames[-1].fieldOutputs['U'].values.keys()
+
+
+
+odb.steps['Load1'].historyRegion #search through each region until correct node located?
+print odb.steps['Load1'].historyRegion.['NodeSet  Z000001']

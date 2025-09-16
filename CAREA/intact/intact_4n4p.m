@@ -1,5 +1,5 @@
 % Facet Contact Area (CAREA)
-% model15_intact/4n & 4p
+% model15_intact/4n & 4p Upper Left 
 clear all;
 %% 4P
 figure (1)

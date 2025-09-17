@@ -1,6 +1,7 @@
 %% Facet Contact Area
 % 4 P/N intact model
 % file = 4PN_facetContactArea.xls
+% Lower section
 figure(3)
 
 Data = xlsread('4NP_facetContactArea');  % importing the CFNM/CAREA columns for each facet pair

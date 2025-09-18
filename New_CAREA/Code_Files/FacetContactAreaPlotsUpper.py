@@ -1,78 +1,104 @@
+import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import itertools
+import tkinter as tk
+from tkinter import filedialog
 
-## Plotting Facet Contact Area under extenstion/flexion (4N/4P) for the upper section.
-# Initialize empty arrays as in MATLAB code
-c4ulxp = np.array([]) - 2
-c4ulyp = np.array([])
+# =====================
+# Description
+# =====================
+# This script reads an Excel file containing facet contact area data, and plot said data.
+# Specfically it is ploting data for the Upper facets both left() and right
+# =====================
+# File Selection
+# =====================
+root = tk.Tk()
+root.withdraw()  # Hide Tkinter root window
+file_path = filedialog.askopenfilename(
+    title="Select an Excel file",
+    filetypes=[("Excel files", "*.xlsx *.xls")]
+)
 
-c4urxp = np.array([]) - 2
-c4uryp = np.array([])
+if not file_path:
+    raise FileNotFoundError("No file selected!")
 
-c5ulxp = np.array([]) - 2
-c5ulyp = np.array([])
+print("Selected file:", file_path)
 
-c5urxp = np.array([]) - 2
-c5uryp = np.array([])
+# =====================
+# Load Facet Labels (row 4 of Excel)
+# =====================
+df_all = pd.read_excel(file_path, sheet_name="Sheet1", header=None)
+facet_labels = df_all.iloc[2].dropna().tolist()  # row 4 (index=2 in zero-based)
+print("Facet labels found:", facet_labels)
 
-c6ulxp = np.array([]) - 2
-c6ulyp = np.array([])
+# =====================
+# Load Data (skip first 4 rows)
+# =====================
+df_data = pd.read_excel(file_path, sheet_name="Sheet1", skiprows=4)
 
-c6urxp = np.array([]) - 2
-c6uryp = np.array([])
+# Build dictionary
+data = {}
+for i, label in enumerate(facet_labels):
+    cols = df_data.iloc[:, i*3:(i+1)*3]
+    if cols.shape[1] == 3:
+        data[label] = {
+            "time": cols.iloc[:, 0].to_numpy(),
+            "moment": cols.iloc[:, 1].to_numpy(),
+            "CAREA": cols.iloc[:, 2].to_numpy()
+        }
 
-c7ulxp = np.array([]) - 2
-c7ulyp = np.array([])
+# =====================
+# Plotting Functions
+# =====================
+def plot_facet(data, left_label, right_label, left_color, right_color):
+    left_xn = -1 * data[left_label]["moment"] + 2
+    left_yp = data[left_label]["CAREA"]
 
-c7urxp = np.array([]) - 2
-c7uryp = np.array([])
+    right_xn = -1 * data[right_label]["moment"] + 2
+    right_yp = data[right_label]["CAREA"]
 
-c4ulxn = -1 * np.array([]) + 2
-c4ulyn = np.array([])
-
-c4urxn = -1 * np.array([]) + 2
-c4uryn = np.array([])
-
-c5ulxn = -1 * np.array([]) + 2
-c5ulyn = np.array([])
-
-c5urxn = -1 * np.array([]) + 2
-c5uryn = np.array([])
-
-c6ulxn = -1 * np.array([]) + 2
-c6ulyn = np.array([])
-
-c6urxn = -1 * np.array([]) + 2
-c6uryn = np.array([])
-
-c7ulxn = -1 * np.array([]) + 2
-c7ulyn = np.array([])
-
-c7urxn = -1 * np.array([]) + 2
-c7uryn = np.array([])
-
-plt.figure(25)
-
-def plot_facet(left_xn, left_yp, right_xn, right_yp, left_color, right_color, label_left, label_right):
-    # Flip slices from index 1 to 20 (2:21 in MATLAB, zero-based in Python means 1:21)
-    # Use only if arrays have enough elements, else empty arrays
     left_xl = 2 * np.concatenate((np.flip(left_xn[1:21]), left_yp))
     left_yl = np.concatenate((np.flip(left_yp[1:21]), left_yp))
-    p_left, = plt.plot(left_xl, left_yl, color=left_color, label=label_left)
+    p_left, = plt.plot(left_xl, left_yl, color=left_color, label=left_label)
 
     right_xr = 2 * np.concatenate((np.flip(right_xn[1:21]), right_yp))
     right_yr = np.concatenate((np.flip(right_yp[1:21]), right_yp))
-    p_right, = plt.plot(right_xr, right_yr, linestyle='-.', color=right_color, label=label_right)
+    p_right, = plt.plot(right_xr, right_yr, linestyle='-.', color=right_color, label=right_label)
 
     return p_left, p_right
 
-a, e = plot_facet(c4ulxn, c4ulyp, c4urxn, c4uryp, 'r', 'r', 'C4UL', 'C4UR')
-b, f = plot_facet(c5ulxn, c5ulyp, c5urxn, c5uryp, 'g', 'g', 'C5UL', 'C5UR')
-c, g = plot_facet(c6ulxn, c6ulyp, c6urxn, c6uryp, 'b', 'b', 'C6UL', 'C6UR')
-d, h = plot_facet(c7ulxn, c7ulyp, c7urxn, c7uryp, 'c', 'c', 'C7UL', 'C7UR')
+def group_facets(labels):
+    pairs = []
+    for l in labels:
+        if l.endswith("UL"):
+            base = l[:-2]
+            r = base + "UR"
+            if r in labels:
+                pairs.append((l, r))
+        elif l.endswith("LL"):
+            base = l[:-2]
+            r = base + "LR"
+            if r in labels:
+                pairs.append((l, r))
+    return pairs
 
-plt.title('Facet Contact Area (CAREA) for model 14 under extension/flexion (4N/4P)')
+# =====================
+# Plot All Facet Pairs
+# =====================
+plt.figure(figsize=(10, 7))
+
+colors = itertools.cycle(['r', 'g', 'b', 'c', 'm', 'y', 'k'])
+handles = []
+
+pairs = group_facets(list(data.keys()))
+for left, right in pairs:
+    color = next(colors)
+    p_left, p_right = plot_facet(data, left, right, color, color)
+    handles.extend([p_left, p_right])
+
+plt.title('Facet Contact Area (CAREA) under extension/flexion (4N/4P)')
 plt.xlabel('Moment (N-m)')
 plt.ylabel('Area (mm^2)')
-plt.legend(handles=[a,b,c,d,e,f,g,h], loc='lower center')
+plt.legend(handles=handles, loc='lower center', ncol=4)
 plt.show()

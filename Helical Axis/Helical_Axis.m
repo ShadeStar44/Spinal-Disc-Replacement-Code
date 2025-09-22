@@ -6,7 +6,7 @@ clear,clc
 % corresponding x,y,z displacements (columns 9-11). Columns 2-4 are the
 % original coordinates of the ref node.
 data = xlsread('C4_refno.xlsx','C4_refno');
-data1 = xlsread('C5_refno.xlsx','C5_refno');
+data1 = xlsread('C5_refno.xlsx','C5_refno'); +
 
 % Coords for Ref Nodes Before Movement (Eq(4) from paper)
 a1  = data(1,2:4)+data(1,9:11);

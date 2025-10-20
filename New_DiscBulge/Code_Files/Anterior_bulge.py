@@ -28,12 +28,23 @@ print("Selected directory:", file_folder)
 #Seems like specifically pulls out C34_4N for each model out of a directory that contains
 #ALL the CSV files, but the directory in our repo has it split by M1, M2, and so forth so will change this - Anders
 list_C34_4N = []
-for entry in os.listdir(file_folder):    
-    if 'C34' in entry:
-        if '4N' in entry:
-            print(entry)
-            list_C34_4N.append(entry)
-            print(list_C34_4N)
+list_C56_4N = []
+list_C67_4N = []
+for entry in os.listdir(file_folder):
+    for file in os.listdir(entry):   
+        if 'C34' in file:
+            if '4N' in file:
+                print(file)
+                list_C34_4N.append(file)
+                print(list_C34_4N)
+        
+        if 'C56' in entry:
+            if '4N' in entry:
+                print(file)
+                list_C56_4N.append(file)
+                print(list_C56_4N)
+        
+        
 
 
 # @author chriskey
@@ -88,3 +99,5 @@ def analysis(entry,graph_title):
     
         
     bulge_stuff.plot(x = 'Moment',title = graph_title)
+
+analysis(list_C34_4N,'C34 Level')

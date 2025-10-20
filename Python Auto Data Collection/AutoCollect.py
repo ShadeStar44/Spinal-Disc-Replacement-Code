@@ -6,6 +6,8 @@ Created on Sat Jan 16 12:27:56 2021
 @author: chriskey
 """
 
+#need abuqus to run this code, but will be very helpful im imagining.
+#will as Alyssa or Andrew to run this and see what happens
 
 from abaqus import *
 from abaqusConstants import *

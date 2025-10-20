@@ -4,6 +4,12 @@ import matplotlib as plt
 import itertools
 import tkinter as tk
 from tkinter import filedialog
+#authors
+
+#-------------------------------------------
+#This file takes an excel file containing contact area, force magnitude, and mean stress data
+# (Mean stress = Force/contact area), and plots it over moment
+#-------------------------------------------
 
 #Data reading
 
@@ -19,9 +25,12 @@ if not file_path:
 
 print("Selected file:", file_path)
 
-df_all = pd.read_excel(file_path, sheet_name="Sheet1", header=None)
+
+#Extracting facet labels
+df_all = pd.read_excel(file_path, sheet_name="Sheet1", header=None) #pandas read function
 facet_labels = df_all.iloc[2].dropna().tolist()  # row 4 (index=2 in zero-based)
 print("Facet labels found:", facet_labels)
+
 
 df_data = pd.read_excel(file_path, sheet_name="Sheet1", skiprows=4)
 
@@ -37,6 +46,7 @@ for i, label in enumerate(facet_labels):
             "CFNM": cols.iloc[:,3].to_numpy(),
             "FMS": cols.iloc[:,4].to_numpy(),
         }
+
 
 
 

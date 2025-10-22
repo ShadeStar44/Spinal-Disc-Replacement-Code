@@ -152,11 +152,26 @@ def read_directory(model):
 #and a list of colors and plots the data with CFNM over moment
 #--------------------------------------------------------------------------------------------------------------\
 
-def plot_facet(data_p, data_n, pairs, model, motion):
+def plot_facet(model, motion):
+    #Read in data for desired model
+    data4p, data4n, data5p, data5n, data6p, data6n, facet_pairs = read_directory(model)
 
+    if (motion == '4N-4P'):
+        data_n = data4n
+        data_p = data4p
+
+    elif (motion == '5N-5P'):
+        data_n_1 = data5n
+        data_p_1 = data5p
+        
+    elif (motion == '6N-6P'):
+        data_n_1 = data6n
+        data_p_1 = data6p
+
+    
     fig, ax = plt.subplots()
     colors = itertools.cycle(['r', 'g', 'b', 'c', 'm', 'y', 'k'])
-    for left, right in pairs:
+    for left, right in facet_pairs:
         color = next(colors)
 
         #Reading data for right side
@@ -170,8 +185,6 @@ def plot_facet(data_p, data_n, pairs, model, motion):
         left_yn = data_n[left]["CFNM"]
         left_xp = data_p[left]["moment"]
         left_yp = data_p[left]["CFNM"]
-
-
         
         #left_x = np.concatenate((np.flip(left_xn[0:20]), left_xp))
         #right_x = np.concatenate((np.flip(right_xn[0:20]), right_xp))
@@ -186,17 +199,20 @@ def plot_facet(data_p, data_n, pairs, model, motion):
                    0, 0.12, 0.21, 0.33, 0.43, 0.54, 0.64, 0.72, 0.80, 0.96, 
                    1.02, 1.13, 1.22, 1.32, 1.41, 1.52, 1.61, 1.71, 1.81, 1.92]
         
+        #Plot left node values
         left_y = np.concatenate((np.flip(left_yn[0:20]), left_yp[1:20]))
         print('left node y: ', left_y)
 
         ax.plot(moment, left_y, color=color, label=left)
 
+        #Plot right node values
         right_y = np.concatenate((np.flip(right_yn[0:20]), right_yp[1:20]))
         print('right node y:', right_y)
 
         ax.plot(moment, right_y, linestyle='-.', color=color, label=right)
 
-    handles, labels = ax.get_legend_handles_labels()
+
+    handles, labels = ax.get_legend_handles_labels() #collects handles, labels
     fig.set_figwidth(8)
     ax.set_title(f"Facet Contact Force Magntiude (CFNM) for {model} model under motion: {motion}")
     ax.set_xlabel('Moment (N-m)')
@@ -211,101 +227,259 @@ def plot_facet(data_p, data_n, pairs, model, motion):
 #of the disk between the two models on different subplots
 # =====================
 
-#def plotfacet_compare():
+def plotfacet_compare(model1, model2, motion):
+    #Read in data for desired two models to be compared
+    data4p_1, data4n_1, data5p_1, data5n_1, data6p_1, data6n_1, facet_pairs = read_directory(model1)
+    data4p_2, data4n_2, data5p_2, data5n_2, data6p_2, data6n_2, facet_pairs = read_directory(model2)
+
+    #Specify desired motion, decides what will be plotted
+    if (motion == '4N-4P'):
+        data_n_1 = data4n_1
+        data_p_1 = data4p_1
+
+        data_n_2 = data4n_2
+        data_p_2 = data4p_2
+    elif (motion == '5N-5P'):
+        data_n_1 = data5n_1
+        data_p_1 = data5p_1
+        
+        data_n_2 = data5n_2
+        data_p_2 = data5p_2
+    elif (motion == '6N-6P'):
+        data_n_1 = data6n_1
+        data_p_1 = data6p_1
+
+        data_n_2 = data6n_2
+        data_p_2 = data6p_2
+    
+    #Create figure, desired colors for plot
+    fig, ax = plt.subplots(1,2)
+    colors = itertools.cycle(['r', 'g', 'b', 'c', 'm', 'y', 'k'])
+
+    #Hardcoded values for moment, still couldn't figure out why it's not reading right
+    moment = [-1.92, -1.81, -1.71, -1.61, -1.52, -1.41, -1.32, -1.22, -1.13, 
+              -1.02, -0.96, -0.80, -0.72, -0.64, -0.54, -0.43, -0.33, -0.21, -0.12, 
+               0, 0.12, 0.21, 0.33, 0.43, 0.54, 0.64, 0.72, 0.80, 0.96, 
+               1.02, 1.13, 1.22, 1.32, 1.41, 1.52, 1.61, 1.71, 1.81, 1.92]
+
+    #Iterate through all facet pairs
+    for left, right in facet_pairs:
+        color = next(colors)
+        if left.startswith('5'): #if C5 disc values, plot data on left and right plot
+            leftyn1 = data_n_1[left]["CFNM"]
+            leftyp1 = data_p_1[left]["CFNM"]
+            rightyn1 = data_n_1[right]["CFNM"]
+            rightyp1 = data_p_1[right]["CFNM"]
+
+            leftyn2 = data_n_2[left]["CFNM"]
+            leftyp2 = data_p_2[left]["CFNM"]
+            rightyn2 = data_n_2[right]["CFNM"]
+            rightyp2 = data_p_2[right]["CFNM"]
+
+            lefty1 = np.concatenate((np.flip(leftyn1[0:20]), leftyp1[1:20]))
+            righty1 = np.concatenate((np.flip(rightyn1[0:20]), rightyp1[1:20]))
+
+            lefty2 = np.concatenate((np.flip(leftyn2[0:20]), leftyp2[1:20]))
+            righty2 = np.concatenate((np.flip(rightyn2[0:20]), rightyp2[1:20]))
+
+            ax[0].plot(moment, lefty1, color=color, label=left)
+            ax[0].plot(moment, righty1, linestyle='-.', color=color, label=right)
+
+            ax[1].plot(moment, lefty2, color=color, label=left)
+            ax[1].plot(moment, righty2, linestyle='-.', color=color, label=right)
+
+
+        elif left.startswith('4'): #If C4 disc values, plot data on left and right plot
+            leftyn1 = data_n_1[left]["CFNM"]
+            leftyp1 = data_p_1[left]["CFNM"]
+            rightyn1 = data_n_1[right]["CFNM"]
+            rightyp1 = data_p_1[right]["CFNM"]
+
+            leftyn2 = data_n_2[left]["CFNM"]
+            leftyp2 = data_p_2[left]["CFNM"]
+            rightyn2 = data_n_2[right]["CFNM"]
+            rightyp2 = data_p_2[right]["CFNM"]
+
+            lefty1 = np.concatenate((np.flip(leftyn1[0:20]), leftyp1[1:20]))
+            righty1 = np.concatenate((np.flip(rightyn1[0:20]), rightyp1[1:20]))
+
+            lefty2 = np.concatenate((np.flip(leftyn2[0:20]), leftyp2[1:20]))
+            righty2 = np.concatenate((np.flip(rightyn2[0:20]), rightyp2[1:20]))
+
+            ax[0].plot(moment, lefty1, color=color, label=left)
+            ax[0].plot(moment, righty1, linestyle='-.', color=color, label=right)
+
+            ax[1].plot(moment, lefty2, color=color, label=left)
+            ax[1].plot(moment, righty2, linestyle='-.', color=color, label=right)
+        
+    handles_1, labels_1 = ax[0].get_legend_handles_labels()
+    handles_2, labels_2 = ax[1].get_legend_handles_labels()
+    fig.set_figwidth(8)
+    ax[0].set_title(f"CFNM for {model1} model, C4-C5 Disc, {motion}", fontsize = 10)
+    ax[0].set_xlabel('Moment (N-m)')
+    ax[0].set_ylabel('Force (N)')
+    ax[0].legend(handles=handles_1, labels = labels_1, loc='upper center', ncol = 2)
+
+    ax[1].set_title(f"CFNM for {model2} model, C4-C5 Disc, {motion}", fontsize = 10)
+    ax[1].set_xlabel('Moment (N-m)')
+    ax[1].set_ylabel('Force (N)')
+    ax[1].legend(handles=handles_2, labels = labels_2, loc='upper center', ncol = 2)
+    plt.show()
+    fig.savefig(f"New_CFNM/Plots/Comparative/{model1}-{model2}/{model1}-{model2}-{motion}.png", dpi = 300)
 
 
 
 # ===========================================
 # Plot All Facet Pairs For Individual Models
+#Un-comment sections to get plots you need
 # ===========================================
 
-data4p_15, data4n_15, data5p_15, data5n_15, data6p_15, data6n_15, facet_pairs = read_directory('Intact')
-data4p_14, data4n_14, data5p_14, data5n_14, data6p_14, data6n_14, facet_pairs = read_directory('FixedNoTether')
-data4p_13, data4n_13, data5p_13, data5n_13, data6p_13, data6n_13, facet_pairs = read_directory('FixedTether')
-data4p_12, data4n_12, data5p_12, data5n_12, data6p_12, data6n_12, facet_pairs = read_directory('LatPhysNoTether')
-data4p_11, data4n_11, data5p_11, data5n_11, data6p_11, data6n_11, facet_pairs = read_directory('LatPhysTether')
-data4p_10, data4n_10, data5p_10, data5n_10, data6p_10, data6n_10, facet_pairs = read_directory('APPhysNoTether')
-data4p_9, data4n_9, data5p_9, data5n_9, data6p_9, data6n_9, facet_pairs = read_directory('APPhysTether')
-data4p_8, data4n_8, data5p_8, data5n_8, data6p_8, data6n_8, facet_pairs = read_directory('PhysPhysNoTether')
-data4p_7, data4n_7, data5p_7, data5n_7, data6p_7, data6n_7, facet_pairs = read_directory('PhysPhysTether')
-data4p_6, data4n_6, data5p_6, data5n_6, data6p_6, data6n_6, facet_pairs = read_directory('LatSlideNoTether')
-data4p_5, data4n_5, data5p_5, data5n_5, data6p_5, data6n_5, facet_pairs = read_directory('LatSlideTether')
-data4p_4, data4n_4, data5p_4, data5n_4, data6p_4, data6n_4, facet_pairs = read_directory('APSlideNoTether')
-data4p_3, data4n_3, data5p_3, data5n_3, data6p_3, data6n_3, facet_pairs = read_directory('APSlideTether')
-data4p_2, data4n_2, data5p_2, data5n_2, data6p_2, data6n_2, facet_pairs = read_directory('SlideSlideNoTether')
-data4p_1, data4n_1, data5p_1, data5n_1, data6p_1, data6n_1, facet_pairs = read_directory('SlideSlideTether')
-
 #-----Plotting Intact model-----
-#plot_facet(data4p_15, data4n_15, facet_pairs, model = 'Intact', motion = '4N-4P')
-#plot_facet(data5p_15, data5n_15, facet_pairs, model = 'Intact', motion = '5N-5P')
-#plot_facet(data6p_15, data6n_15, facet_pairs, model = 'Intact', motion = '6N-6P')
+#plot_facet('Intact', '4N-4P')
+#plot_facet('Intact', '5N-5P')
+#plot_facet('Intact', '6N-6P')
 
 #-----Plotting FixedNoTether model-----
-#plot_facet(data4p_14, data4n_14, facet_pairs, model = 'FixedNoTether', motion = '4N-4P')
-#plot_facet(data5p_14, data5n_14, facet_pairs, model = 'FixedNoTether', motion = '5N-5P')
-#plot_facet(data6p_14, data6n_14, facet_pairs, model = 'FixedNoTether', motion = '6N-6P')
+#plot_facet('FixedNoTether', '4N-4P')
+#plot_facet('FixedNoTether', '5N-5P')
+#plot_facet('FixedNoTether', '6N-6P')
 
 #-----Plotting FixedTether model-----
-#plot_facet(data4p_13, data4n_13, facet_pairs, model = 'FixedTether', motion = '4N-4P')
-#plot_facet(data5p_13, data5n_13, facet_pairs, model = 'FixedTether', motion = '5N-5P')
-#plot_facet(data6p_13, data6n_13, facet_pairs, model = 'FixedTether', motion = '6N-6P')
+#plot_facet('FixedTether', '4N-4P')
+#plot_facet('FixedTether', '5N-5P')
+#plot_facet('FixedTether', '6N-6P')
 
 #-----Plotting LatPhysNoTether model-----
-#plot_facet(data4p_12, data4n_12, facet_pairs, model = 'LatPhysNoTether', motion = '4N-4P')
-#plot_facet(data5p_12, data5n_12, facet_pairs, model = 'LatPhysNoTether', motion = '5N-5P')
-#plot_facet(data6p_12, data6n_12, facet_pairs, model = 'LatPhysNoTether', motion = '6N-6P')
+#plot_facet('LatPhysNoTether', '4N-4P')
+#plot_facet('LatPhysNoTether', '5N-5P')
+#plot_facet('LatPhysNoTether', '6N-6P')
 
 #-----Plotting LatPhysTether model-----
-#plot_facet(data4p_11, data4n_11, facet_pairs, model = 'LatPhysTether', motion = '4N-4P')
-#plot_facet(data5p_11, data5n_11, facet_pairs, model = 'LatPhysTether', motion = '5N-5P')
-#plot_facet(data6p_11, data6n_11, facet_pairs, model = 'LatPhysTether', motion = '6N-6P')
+#plot_facet('LatPhysTether', '4N-4P')
+#plot_facet('LatPhysTether', '5N-5P')
+#plot_facet('LatPhysTether', '6N-6P')
 
 #-----Plotting APPhysNoTether model-----
-#plot_facet(data4p_10, data4n_10, facet_pairs, model = 'APPhysNoTether', motion = '4N-4P')
-#plot_facet(data5p_10, data5n_10, facet_pairs, model = 'APPhysNoTether', motion = '5N-5P')
-#plot_facet(data6p_10, data6n_10, facet_pairs, model = 'APPhysNoTether', motion = '6N-6P')
+#plot_facet('APPhysNoTether', '4N-4P')
+#plot_facet('APPhysNoTether', '5N-5P')
+#plot_facet('APPhysNoTether', '6N-6P')
 
 #-----Plotting APPhysTether model-----
-#plot_facet(data4p_9, data4n_9, facet_pairs, model = 'APPhysTether', motion = '4N-4P')
-#plot_facet(data5p_9, data5n_9, facet_pairs, model = 'APPhysTether', motion = '5N-5P')
-#plot_facet(data6p_9, data6n_9, facet_pairs, model = 'APPhysTether', motion = '6N-6P')
+#plot_facet('APPhysTether', '4N-4P')
+#plot_facet('APPhysTether', '5N-5P')
+#plot_facet('APPhysTether', '6N-6P')
 
 #-----Plotting PhysPhysNoTether model-----
-#plot_facet(data4p_8, data4n_8, facet_pairs, model = 'PhysPhysNoTether', motion = '4N-4P')
-#plot_facet(data5p_8, data5n_8, facet_pairs, model = 'PhysPhysNoTether', motion = '5N-5P')
-#plot_facet(data6p_8, data6n_8, facet_pairs, model = 'PhysPhysNoTether', motion = '6N-6P')
+#plot_facet('PhysPhysNoTether', '4N-4P')
+#plot_facet('PhysPhysNoTether', '5N-5P')
+#plot_facet('PhysPhysNoTether', '6N-6P')
 
 #-----Plotting PhysPhysTether model-----
-#plot_facet(data4p_7, data4n_7, facet_pairs, model = 'PhysPhysTether', motion = '4N-4P')
-#plot_facet(data5p_7, data5n_7, facet_pairs, model = 'PhysPhysTether', motion = '5N-5P')
-#plot_facet(data6p_7, data6n_7, facet_pairs, model = 'PhysPhysTether', motion = '6N-6P')
+#plot_facet('PhysPhysTether', '4N-4P')
+#plot_facet('PhysPhysTether', '5N-5P')
+#plot_facet('PhysPhysTether', '6N-6P')
 
 #-----Plotting LatSlideNoTether model-----
-#plot_facet(data4p_6, data4n_6, facet_pairs, model = 'LatSlideNoTether', motion = '4N-4P')
-#plot_facet(data5p_6, data5n_6, facet_pairs, model = 'LatSlideNoTether', motion = '5N-5P')
-#plot_facet(data6p_6, data6n_6, facet_pairs, model = 'LatSlideNoTether', motion = '6N-6P')
+#plot_facet('LatSlideNoTether', '4N-4P')
+#plot_facet('LatSlideNoTether', '5N-5P')
+#plot_facet('LatSlideNoTether', '6N-6P')
 
 #-----Plotting LatSlideTether model-----
-#lot_facet(data4p_5, data4n_5, facet_pairs, model = 'LatSlideTether', motion = '4N-4P')
-#plot_facet(data5p_5, data5n_5, facet_pairs, model = 'LatSlideTether', motion = '5N-5P')
-#plot_facet(data6p_5, data6n_5, facet_pairs, model = 'LatSlideTether', motion = '6N-6P')
+#plot_facet('LatSlideTether', '4N-4P')
+#plot_facet('LatSlideTether', '5N-5P')
+#plot_facet('LatSlideTether', '6N-6P')
 
 #-----Plotting APSlideNoTether model-----
-#plot_facet(data4p_4, data4n_4, facet_pairs, model = 'APSlideNoTether', motion = '4N-4P')
-#plot_facet(data5p_4, data5n_4, facet_pairs, model = 'APSlideNoTether', motion = '5N-5P')
-#plot_facet(data6p_4, data6n_4, facet_pairs, model = 'APSlideNoTether', motion = '6N-6P')
+#plot_facet('APSlideNoTether', '4N-4P')
+#plot_facet('APSlideNoTether', '5N-5P')
+#plot_facet('APSlideNoTether', '6N-6P')
 
 #-----Plotting APSlideTether model-----
-#plot_facet(data4p_3, data4n_3, facet_pairs, model = 'APSlideTether', motion = '4N-4P')
-#plot_facet(data5p_3, data5n_3, facet_pairs, model = 'APSlideTether', motion = '5N-5P')
-#plot_facet(data6p_3, data6n_3, facet_pairs, model = 'APSlideTether', motion = '6N-6P')
+#plot_facet('APSlideTether', '4N-4P')
+#plot_facet('APSlideTether', '5N-5P')
+#plot_facet('APSlideTether', '6N-6P')
 
 #-----Plotting SlideSlideNoTether-----
-#plot_facet(data4p_2, data4n_2, facet_pairs, model = 'SlideSlideNoTether', motion = '4N-4P')
-#plot_facet(data5p_2, data5n_2, facet_pairs, model = 'SlideSlideNoTether', motion = '5N-5P')
-#plot_facet(data6p_2, data6n_2, facet_pairs, model = 'SlideSlideNoTether', motion = '6N-6P')
+#plot_facet('SlideSlideNoTether', '4N-4P')
+#plot_facet('SlideSlideNoTether', '5N-5P')
+#plot_facet('SlideSlideNoTether', '6N-6P')
 
 #-----Plotting SlideSlideTether-----
-#plot_facet(data4p_1, data4n_1, facet_pairs, model = 'SlideSlideTether', motion = '4N-4P')
-#plot_facet(data5p_1, data5n_1, facet_pairs, model = 'SlideSlideTether', motion = '5N-5P')
-#plot_facet(data6p_1, data6n_1, facet_pairs, model = 'SlideSlideTether', motion = '6N-6P')
+#plot_facet('SlideSlideTether', '4N-4P')
+#plot_facet('SlideSlideTether', '5N-5P')
+#plot_facet('SlideSlideTether', '6N-6P')
+
+#=========================================
+#Plotting Comparative Plots
+#Un-comment sections to get plots you need
+#=========================================
+
+#Comparing Intact - FixedNoTether model
+#plotfacet_compare('Intact', 'FixedNoTether','4N-4P')
+#plotfacet_compare('Intact', 'FixedNoTether','5N-5P')
+#plotfacet_compare('Intact', 'FixedNoTether','6N-6P')
+
+#Comparing Intact - FixedTether model
+#plotfacet_compare('Intact', 'FixedTether','4N-4P')
+#plotfacet_compare('Intact', 'FixedTether','5N-5P')
+#plotfacet_compare('Intact', 'FixedTether','6N-6P')
+
+#Comparing Intact - LatPhysNoTether model
+#plotfacet_compare('Intact', 'LatPhysNoTether','4N-4P')
+#plotfacet_compare('Intact', 'LatPhysNoTether','5N-5P') #Plot appears significantly different, wonder why?
+#plotfacet_compare('Intact', 'LatPhysNoTether','6N-6P')
+
+#Comparing Intact - LatPhysTether model
+#plotfacet_compare('Intact', 'LatPhysTether','4N-4P')
+#plotfacet_compare('Intact', 'LatPhysTether','5N-5P')
+#plotfacet_compare('Intact', 'LatPhysTether','6N-6P')
+
+#Comparing Intact - APPhysNoTether model
+#plotfacet_compare('Intact', 'APPhysNoTether','4N-4P')
+#plotfacet_compare('Intact', 'APPhysNoTether','5N-5P')
+#plotfacet_compare('Intact', 'APPhysNoTether','6N-6P')
+
+#Comparing Intact - APPhysTether model
+#plotfacet_compare('Intact', 'APPhysTether','4N-4P')
+#plotfacet_compare('Intact', 'APPhysTether','5N-5P')
+#plotfacet_compare('Intact', 'APPhysTether','6N-6P')
+
+#Comparing Intact - PhysPhysNoTether model
+#plotfacet_compare('Intact', 'PhysPhysNoTether','4N-4P')
+#plotfacet_compare('Intact', 'PhysPhysNoTether','5N-5P') #significant difference in this plot 
+#plotfacet_compare('Intact', 'PhysPhysNoTether','6N-6P')
+
+#Comparing Intact - PhysPhysTether
+#plotfacet_compare('Intact', 'PhysPhysTether','4N-4P')
+#plotfacet_compare('Intact', 'PhysPhysTether','5N-5P')
+#plotfacet_compare('Intact', 'PhysPhysTether','6N-6P')
+
+#Comparing Intact - LatSlideNoTether model
+#plotfacet_compare('Intact', 'LatSlideNoTether','4N-4P')
+#plotfacet_compare('Intact', 'LatSlideNoTether','5N-5P')
+#plotfacet_compare('Intact', 'LatSlideNoTether','6N-6P')
+
+#Comparing Intact - LatSlideTether
+#plotfacet_compare('Intact', 'LatSlideTether','4N-4P')
+#plotfacet_compare('Intact', 'LatSlideTether','5N-5P')
+#plotfacet_compare('Intact', 'LatSlideTether','6N-6P')
+
+#Comparing Intact - APSlideNoTether model
+#plotfacet_compare('Intact', 'APSlideNoTether','4N-4P')
+#plotfacet_compare('Intact', 'APSlideNoTether','5N-5P')
+#plotfacet_compare('Intact', 'APSlideNoTether','6N-6P')
+
+#Comparing Intact - APSlideTether
+#plotfacet_compare('Intact', 'APSlideTether','4N-4P')
+#plotfacet_compare('Intact', 'APSlideTether','5N-5P')
+#plotfacet_compare('Intact', 'APSlideTether','6N-6P')
+
+#Comparing Intact - SlideSlideNoTether model
+#plotfacet_compare('Intact', 'SlideSlideNoTether','4N-4P')
+#plotfacet_compare('Intact', 'SlideSlideNoTether','5N-5P')
+#plotfacet_compare('Intact', 'SlideSlideNoTether','6N-6P')
+
+#Comparing Intact - SlideSlideTether model
+plotfacet_compare('Intact', 'SlideSlideTether','4N-4P')
+plotfacet_compare('Intact', 'SlideSlideTether','5N-5P')
+plotfacet_compare('Intact', 'SlideSlideTether','6N-6P')

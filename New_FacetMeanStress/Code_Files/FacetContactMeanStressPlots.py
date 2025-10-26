@@ -417,11 +417,13 @@ def plotfacet_compare(model1, model2, motion):
     ax[0].set_title(f"FCMS for {model1} model, C4-5 C5-6, {motion}", fontsize = 8)
     ax[0].set_xlabel('Moment (N-m)')
     ax[0].set_ylabel('Mean Stress (MPa)')
+    ax[0].set_ylim(-.01,2.5)
     ax[0].legend(handles=handles_1, labels = labels_1, loc='upper center', ncol = 2)
 
     ax[1].set_title(f"FCMS for {model2} model, C4-5 C5-6, {motion}", fontsize = 8)
     ax[1].set_xlabel('Moment (N-m)')
     ax[1].set_ylabel('Contact Area (MPa)')
+    ax[1].set_ylim(-.01,2.5)
     ax[1].legend(handles=handles_2, labels = labels_2, loc='upper center', ncol = 2)
     plt.show()
     fig.savefig(f"New_FacetMeanStress/Plots/Comparative/{model1}-{model2}/{model1}-{model2}-{motion}.png", dpi = 300)
@@ -450,9 +452,9 @@ def plotfacet_compare(model1, model2, motion):
 
 
 #-----Plotting FixedTether model-----
-plot_facet('FixedTether', '4N-4P')
-plot_facet('FixedTether', '5N-5P')
-plot_facet('FixedTether', '6N-6P')
+#plot_facet('FixedTether', '4N-4P')
+#plot_facet('FixedTether', '5N-5P')
+#plot_facet('FixedTether', '6N-6P')
 
 #-----Plotting LatPhysNoTether model-----
 #plot_facet('LatPhysNoTether', '4N-4P')
@@ -535,34 +537,34 @@ plotfacet_compare('Intact', 'FixedTether','5N-5P')
 plotfacet_compare('Intact', 'FixedTether','6N-6P')
 
 #Comparing Intact - LatPhysNoTether model
-#plotfacet_compare('Intact', 'LatPhysNoTether','4N-4P')
-#plotfacet_compare('Intact', 'LatPhysNoTether','5N-5P') 
-#plotfacet_compare('Intact', 'LatPhysNoTether','6N-6P')
+plotfacet_compare('Intact', 'LatPhysNoTether','4N-4P')
+plotfacet_compare('Intact', 'LatPhysNoTether','5N-5P') 
+plotfacet_compare('Intact', 'LatPhysNoTether','6N-6P')
 
 #Comparing Intact - LatPhysTether model
-#plotfacet_compare('Intact', 'LatPhysTether','4N-4P')
-#plotfacet_compare('Intact', 'LatPhysTether','5N-5P')
-#plotfacet_compare('Intact', 'LatPhysTether','6N-6P')
+plotfacet_compare('Intact', 'LatPhysTether','4N-4P')
+plotfacet_compare('Intact', 'LatPhysTether','5N-5P')
+plotfacet_compare('Intact', 'LatPhysTether','6N-6P')
 
 #Comparing Intact - PhysPhysNoTether model
-#plotfacet_compare('Intact', 'PhysPhysNoTether','4N-4P')
-#plotfacet_compare('Intact', 'PhysPhysNoTether','5N-5P')  
-#plotfacet_compare('Intact', 'PhysPhysNoTether','6N-6P')
+plotfacet_compare('Intact', 'PhysPhysNoTether','4N-4P')
+plotfacet_compare('Intact', 'PhysPhysNoTether','5N-5P')  
+plotfacet_compare('Intact', 'PhysPhysNoTether','6N-6P')
 
 #Comparing Intact - PhysPhysTether
-#plotfacet_compare('Intact', 'PhysPhysTether','4N-4P')
-#plotfacet_compare('Intact', 'PhysPhysTether','5N-5P')
-#plotfacet_compare('Intact', 'PhysPhysTether','6N-6P')
+plotfacet_compare('Intact', 'PhysPhysTether','4N-4P')
+plotfacet_compare('Intact', 'PhysPhysTether','5N-5P')
+plotfacet_compare('Intact', 'PhysPhysTether','6N-6P')
 
 #Comparing Intact - LatSlideNoTether model
-#plotfacet_compare('Intact', 'LatSlideNoTether','4N-4P')
-#plotfacet_compare('Intact', 'LatSlideNoTether','5N-5P')
-#plotfacet_compare('Intact', 'LatSlideNoTether','6N-6P')
+plotfacet_compare('Intact', 'LatSlideNoTether','4N-4P')
+plotfacet_compare('Intact', 'LatSlideNoTether','5N-5P')
+plotfacet_compare('Intact', 'LatSlideNoTether','6N-6P')
 
 #Comparing Intact - LatSlideTether
-#plotfacet_compare('Intact', 'LatSlideTether','4N-4P')
-#plotfacet_compare('Intact', 'LatSlideTether','5N-5P')
-#plotfacet_compare('Intact', 'LatSlideTether','6N-6P')
+plotfacet_compare('Intact', 'LatSlideTether','4N-4P')
+plotfacet_compare('Intact', 'LatSlideTether','5N-5P')
+plotfacet_compare('Intact', 'LatSlideTether','6N-6P')
 
 #Comparing Intact - SlideSlideNoTether model
 #plotfacet_compare('Intact', 'SlideSlideNoTether','4N-4P')

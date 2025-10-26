@@ -318,12 +318,14 @@ def plotfacet_compare(model1, model2, motion):
     ax[0].set_title(f"CAREA for {model1} model, C4-5 C5-6, {motion}", fontsize = 8)
     ax[0].set_xlabel('Moment (N-m)')
     ax[0].set_ylabel('Contact Area (mm^2)')
-    ax[0].legend(handles=handles_1, labels = labels_1, loc='upper center', ncol = 2)
+    ax[0].set_ylim(30,100)
+    ax[0].legend(handles=handles_1, labels = labels_1, loc='lower center', ncol = 2)
 
     ax[1].set_title(f"CAREA for {model2} model, C4-5 C5-6, {motion}", fontsize = 8)
     ax[1].set_xlabel('Moment (N-m)')
     ax[1].set_ylabel('Contact Area (mm^2)')
-    ax[1].legend(handles=handles_2, labels = labels_2, loc='upper center', ncol = 2)
+    ax[1].set_ylim(30,100)
+    ax[1].legend(handles=handles_2, labels = labels_2, loc='lower center', ncol = 2)
     plt.show()
     fig.savefig(f"New_CAREA/Plots/Comparative/{model1}-{model2}/{model1}-{model2}-{motion}.png", dpi = 300)
 

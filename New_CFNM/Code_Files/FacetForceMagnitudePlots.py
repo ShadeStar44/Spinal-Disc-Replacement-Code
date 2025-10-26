@@ -315,12 +315,12 @@ def plotfacet_compare(model1, model2, motion):
     handles_1, labels_1 = ax[0].get_legend_handles_labels()
     handles_2, labels_2 = ax[1].get_legend_handles_labels()
     fig.set_figwidth(8)
-    ax[0].set_title(f"CFNM for {model1} model, C4-C5 Disc, {motion}", fontsize = 10)
+    ax[0].set_title(f"CFNM for {model1} model, C4-5 C5-6, {motion}", fontsize = 8)
     ax[0].set_xlabel('Moment (N-m)')
     ax[0].set_ylabel('Force (N)')
     ax[0].legend(handles=handles_1, labels = labels_1, loc='upper center', ncol = 2)
 
-    ax[1].set_title(f"CFNM for {model2} model, C4-C5 Disc, {motion}", fontsize = 10)
+    ax[1].set_title(f"CFNM for {model2} model, C4-5 C5-6, {motion}", fontsize = 8)
     ax[1].set_xlabel('Moment (N-m)')
     ax[1].set_ylabel('Force (N)')
     ax[1].legend(handles=handles_2, labels = labels_2, loc='upper center', ncol = 2)
@@ -415,69 +415,69 @@ def plotfacet_compare(model1, model2, motion):
 #=========================================
 
 #Comparing Intact - FixedNoTether model
-#plotfacet_compare('Intact', 'FixedNoTether','4N-4P')
-#plotfacet_compare('Intact', 'FixedNoTether','5N-5P')
-#plotfacet_compare('Intact', 'FixedNoTether','6N-6P')
+plotfacet_compare('Intact', 'FixedNoTether','4N-4P')
+plotfacet_compare('Intact', 'FixedNoTether','5N-5P')
+plotfacet_compare('Intact', 'FixedNoTether','6N-6P')
 
 #Comparing Intact - FixedTether model
-#plotfacet_compare('Intact', 'FixedTether','4N-4P')
-#plotfacet_compare('Intact', 'FixedTether','5N-5P')
-#plotfacet_compare('Intact', 'FixedTether','6N-6P')
+plotfacet_compare('Intact', 'FixedTether','4N-4P')
+plotfacet_compare('Intact', 'FixedTether','5N-5P')
+plotfacet_compare('Intact', 'FixedTether','6N-6P')
 
 #Comparing Intact - LatPhysNoTether model
-#plotfacet_compare('Intact', 'LatPhysNoTether','4N-4P')
-#plotfacet_compare('Intact', 'LatPhysNoTether','5N-5P') #Plot appears significantly different, wonder why?
-#plotfacet_compare('Intact', 'LatPhysNoTether','6N-6P')
+plotfacet_compare('Intact', 'LatPhysNoTether','4N-4P')
+plotfacet_compare('Intact', 'LatPhysNoTether','5N-5P') #Plot appears significantly different, wonder why?
+plotfacet_compare('Intact', 'LatPhysNoTether','6N-6P')
 
 #Comparing Intact - LatPhysTether model
-#plotfacet_compare('Intact', 'LatPhysTether','4N-4P')
-#plotfacet_compare('Intact', 'LatPhysTether','5N-5P')
-#plotfacet_compare('Intact', 'LatPhysTether','6N-6P')
+plotfacet_compare('Intact', 'LatPhysTether','4N-4P')
+plotfacet_compare('Intact', 'LatPhysTether','5N-5P')
+plotfacet_compare('Intact', 'LatPhysTether','6N-6P')
 
 #Comparing Intact - APPhysNoTether model
-#plotfacet_compare('Intact', 'APPhysNoTether','4N-4P')
-#plotfacet_compare('Intact', 'APPhysNoTether','5N-5P')
-#plotfacet_compare('Intact', 'APPhysNoTether','6N-6P')
+plotfacet_compare('Intact', 'APPhysNoTether','4N-4P')
+plotfacet_compare('Intact', 'APPhysNoTether','5N-5P')
+plotfacet_compare('Intact', 'APPhysNoTether','6N-6P')
 
 #Comparing Intact - APPhysTether model
-#plotfacet_compare('Intact', 'APPhysTether','4N-4P')
-#plotfacet_compare('Intact', 'APPhysTether','5N-5P')
-#plotfacet_compare('Intact', 'APPhysTether','6N-6P')
+plotfacet_compare('Intact', 'APPhysTether','4N-4P')
+plotfacet_compare('Intact', 'APPhysTether','5N-5P')
+plotfacet_compare('Intact', 'APPhysTether','6N-6P')
 
 #Comparing Intact - PhysPhysNoTether model
-#plotfacet_compare('Intact', 'PhysPhysNoTether','4N-4P')
-#plotfacet_compare('Intact', 'PhysPhysNoTether','5N-5P') #significant difference in this plot 
-#plotfacet_compare('Intact', 'PhysPhysNoTether','6N-6P')
+plotfacet_compare('Intact', 'PhysPhysNoTether','4N-4P')
+plotfacet_compare('Intact', 'PhysPhysNoTether','5N-5P') #significant difference in this plot 
+plotfacet_compare('Intact', 'PhysPhysNoTether','6N-6P')
 
 #Comparing Intact - PhysPhysTether
-#plotfacet_compare('Intact', 'PhysPhysTether','4N-4P')
-#plotfacet_compare('Intact', 'PhysPhysTether','5N-5P')
-#plotfacet_compare('Intact', 'PhysPhysTether','6N-6P')
+plotfacet_compare('Intact', 'PhysPhysTether','4N-4P')
+plotfacet_compare('Intact', 'PhysPhysTether','5N-5P')
+plotfacet_compare('Intact', 'PhysPhysTether','6N-6P')
 
 #Comparing Intact - LatSlideNoTether model
-#plotfacet_compare('Intact', 'LatSlideNoTether','4N-4P')
-#plotfacet_compare('Intact', 'LatSlideNoTether','5N-5P')
-#plotfacet_compare('Intact', 'LatSlideNoTether','6N-6P')
+plotfacet_compare('Intact', 'LatSlideNoTether','4N-4P')
+plotfacet_compare('Intact', 'LatSlideNoTether','5N-5P')
+plotfacet_compare('Intact', 'LatSlideNoTether','6N-6P')
 
 #Comparing Intact - LatSlideTether
-#plotfacet_compare('Intact', 'LatSlideTether','4N-4P')
-#plotfacet_compare('Intact', 'LatSlideTether','5N-5P')
-#plotfacet_compare('Intact', 'LatSlideTether','6N-6P')
+plotfacet_compare('Intact', 'LatSlideTether','4N-4P')
+plotfacet_compare('Intact', 'LatSlideTether','5N-5P')
+plotfacet_compare('Intact', 'LatSlideTether','6N-6P')
 
 #Comparing Intact - APSlideNoTether model
-#plotfacet_compare('Intact', 'APSlideNoTether','4N-4P')
-#plotfacet_compare('Intact', 'APSlideNoTether','5N-5P')
-#plotfacet_compare('Intact', 'APSlideNoTether','6N-6P')
+plotfacet_compare('Intact', 'APSlideNoTether','4N-4P')
+plotfacet_compare('Intact', 'APSlideNoTether','5N-5P')
+plotfacet_compare('Intact', 'APSlideNoTether','6N-6P')
 
 #Comparing Intact - APSlideTether
-#plotfacet_compare('Intact', 'APSlideTether','4N-4P')
-#plotfacet_compare('Intact', 'APSlideTether','5N-5P')
-#plotfacet_compare('Intact', 'APSlideTether','6N-6P')
+plotfacet_compare('Intact', 'APSlideTether','4N-4P')
+plotfacet_compare('Intact', 'APSlideTether','5N-5P')
+plotfacet_compare('Intact', 'APSlideTether','6N-6P')
 
 #Comparing Intact - SlideSlideNoTether model
-#plotfacet_compare('Intact', 'SlideSlideNoTether','4N-4P')
-#plotfacet_compare('Intact', 'SlideSlideNoTether','5N-5P')
-#plotfacet_compare('Intact', 'SlideSlideNoTether','6N-6P')
+plotfacet_compare('Intact', 'SlideSlideNoTether','4N-4P')
+plotfacet_compare('Intact', 'SlideSlideNoTether','5N-5P')
+plotfacet_compare('Intact', 'SlideSlideNoTether','6N-6P')
 
 #Comparing Intact - SlideSlideTether model
 plotfacet_compare('Intact', 'SlideSlideTether','4N-4P')

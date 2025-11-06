@@ -422,7 +422,7 @@ def plotfacet_compare(model1, model2, motion):
 
     ax[1].set_title(f"FCMS for {model2} model, C4-5 C5-6, {motion}", fontsize = 8)
     ax[1].set_xlabel('Moment (N-m)')
-    ax[1].set_ylabel('Contact Area (MPa)')
+    ax[1].set_ylabel('Mean Stress (MPa)')
     ax[1].set_ylim(-.01,2.5)
     ax[1].legend(handles=handles_2, labels = labels_2, loc='upper center', ncol = 2)
     plt.show()

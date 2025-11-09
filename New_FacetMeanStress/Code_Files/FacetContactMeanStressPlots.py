@@ -491,7 +491,7 @@ def plotfacet_PDR(model1, model2, motion):
 
     handles_1, labels_1 = ax.get_legend_handles_labels()
     fig.set_figwidth(8)
-    ax.set_title(f"Mean Contact Stress Comparison, {motion}", fontsize = 16)
+    ax.set_title(f"Mean Contact Stress Comparison", fontsize = 16)
     ax.set_xlabel('Moment (N-m)')
     ax.set_ylabel('Mean Stress (MPa)')
     ax.set_ylim(-.01,2.5)

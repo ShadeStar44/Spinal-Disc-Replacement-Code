@@ -429,6 +429,75 @@ def plotfacet_compare(model1, model2, motion):
     fig.savefig(f"New_FacetMeanStress/Plots/Comparative/{model1}-{model2}/{model1}-{model2}-{motion}.png", dpi = 300)
 
 
+def plotfacet_PDR(model1, model2, motion):
+ #Read in data for desired two models to be compared
+    data4p_1, data4n_1, data5p_1, data5n_1, data6p_1, data6n_1, facet_pairs = read_directory(model1)
+    data4p_2, data4n_2, data5p_2, data5n_2, data6p_2, data6n_2, facet_pairs = read_directory2(model2)
+
+    #Specify desired motion, decides what will be plotted
+    if (motion == '4N-4P'):
+        data_n_1 = data4n_1
+        data_p_1 = data4p_1
+
+        data_n_2 = data4n_2
+        data_p_2 = data4p_2
+    elif (motion == '5N-5P'):
+        data_n_1 = data5n_1
+        data_p_1 = data5p_1
+        
+        data_n_2 = data5n_2
+        data_p_2 = data5p_2
+    elif (motion == '6N-6P'):
+        data_n_1 = data6n_1
+        data_p_1 = data6p_1
+
+        data_n_2 = data6n_2
+        data_p_2 = data6p_2
+    
+    #Create figure, desired colors for plot
+    fig, ax = plt.subplots(1,1)
+    colors = itertools.cycle(['r', 'g', 'b', 'c', 'm', 'y', 'k'])
+
+    #Hardcoded values for moment, still couldn't figure out why it's not reading right
+    moment = [-1.92, -1.81, -1.71, -1.61, -1.52, -1.41, -1.32, -1.22, -1.13, 
+              -1.02, -0.96, -0.80, -0.72, -0.64, -0.54, -0.43, -0.33, -0.21, -0.12, 
+               0, 0.12, 0.21, 0.33, 0.43, 0.54, 0.64, 0.72, 0.80, 0.96, 
+               1.02, 1.13, 1.22, 1.32, 1.41, 1.52, 1.61, 1.71, 1.81, 1.92]
+
+    #Iterate through all facet pairs
+    for left, right in facet_pairs:
+        if left.startswith('4'): #If C4 disc values, plot data on left and right plot
+                leftyn1 = data_n_1[left]["FCMS"]
+                leftyp1 = data_p_1[left]["FCMS"]
+                rightyn1 = data_n_1[right]["FCMS"]
+                rightyp1 = data_p_1[right]["FCMS"]
+
+                leftyn2 = data_n_2[left]["FCMS"]
+                leftyp2 = data_p_2[left]["FCMS"]
+                rightyn2 = data_n_2[right]["FCMS"]
+                rightyp2 = data_p_2[right]["FCMS"]
+
+                lefty1 = np.concatenate((np.flip(leftyn1[0:20]), leftyp1[1:20]))
+                righty1 = np.concatenate((np.flip(rightyn1[0:20]), rightyp1[1:20]))
+
+                lefty2 = np.concatenate((np.flip(leftyn2[0:20]), leftyp2[1:20]))
+                righty2 = np.concatenate((np.flip(rightyn2[0:20]), rightyp2[1:20]))
+
+                ax.plot(moment, lefty1, color='black', label='Intact Left Side')
+                ax.plot(moment, righty1, linestyle='-.', color='black', label='Intact Right Side')
+
+                ax.plot(moment, lefty2, color='red', label='Replacement Left Side')
+                ax.plot(moment, righty2, linestyle='-.', color='red', label='Replacement Right Side')
+
+    handles_1, labels_1 = ax.get_legend_handles_labels()
+    fig.set_figwidth(8)
+    ax.set_title(f"Mean Contact Stress Comparison, {motion}", fontsize = 16)
+    ax.set_xlabel('Moment (N-m)')
+    ax.set_ylabel('Mean Stress (MPa)')
+    ax.set_ylim(-.01,2.5)
+    ax.legend(handles=handles_1, labels = labels_1, loc='upper center', ncol = 2)
+    plt.show()
+    fig.savefig(f"New_FacetMeanStress/Plots/PDR/Comparison{motion}.png", dpi = 300)
 
 # ===========================================
 # Plot All Facet Pairs For Individual Models
@@ -532,39 +601,39 @@ def plotfacet_compare(model1, model2, motion):
 #=========================================
 
 #Comparing Intact - FixedTether model
-plotfacet_compare('Intact', 'FixedTether','4N-4P')
-plotfacet_compare('Intact', 'FixedTether','5N-5P')
-plotfacet_compare('Intact', 'FixedTether','6N-6P')
+#lotfacet_compare('Intact', 'FixedTether','4N-4P')
+#plotfacet_compare('Intact', 'FixedTether','5N-5P')
+#plotfacet_compare('Intact', 'FixedTether','6N-6P')
 
 #Comparing Intact - LatPhysNoTether model
-plotfacet_compare('Intact', 'LatPhysNoTether','4N-4P')
-plotfacet_compare('Intact', 'LatPhysNoTether','5N-5P') 
-plotfacet_compare('Intact', 'LatPhysNoTether','6N-6P')
+#plotfacet_compare('Intact', 'LatPhysNoTether','4N-4P')
+#plotfacet_compare('Intact', 'LatPhysNoTether','5N-5P') 
+#plotfacet_compare('Intact', 'LatPhysNoTether','6N-6P')
 
 #Comparing Intact - LatPhysTether model
-plotfacet_compare('Intact', 'LatPhysTether','4N-4P')
-plotfacet_compare('Intact', 'LatPhysTether','5N-5P')
-plotfacet_compare('Intact', 'LatPhysTether','6N-6P')
+#plotfacet_compare('Intact', 'LatPhysTether','4N-4P')
+#plotfacet_compare('Intact', 'LatPhysTether','5N-5P')
+#plotfacet_compare('Intact', 'LatPhysTether','6N-6P')
 
 #Comparing Intact - PhysPhysNoTether model
-plotfacet_compare('Intact', 'PhysPhysNoTether','4N-4P')
-plotfacet_compare('Intact', 'PhysPhysNoTether','5N-5P')  
-plotfacet_compare('Intact', 'PhysPhysNoTether','6N-6P')
+#plotfacet_compare('Intact', 'PhysPhysNoTether','4N-4P')
+#plotfacet_compare('Intact', 'PhysPhysNoTether','5N-5P')  
+#plotfacet_compare('Intact', 'PhysPhysNoTether','6N-6P')
 
 #Comparing Intact - PhysPhysTether
-plotfacet_compare('Intact', 'PhysPhysTether','4N-4P')
-plotfacet_compare('Intact', 'PhysPhysTether','5N-5P')
-plotfacet_compare('Intact', 'PhysPhysTether','6N-6P')
+#plotfacet_compare('Intact', 'PhysPhysTether','4N-4P')
+#plotfacet_compare('Intact', 'PhysPhysTether','5N-5P')
+#plotfacet_compare('Intact', 'PhysPhysTether','6N-6P')
 
 #Comparing Intact - LatSlideNoTether model
-plotfacet_compare('Intact', 'LatSlideNoTether','4N-4P')
-plotfacet_compare('Intact', 'LatSlideNoTether','5N-5P')
-plotfacet_compare('Intact', 'LatSlideNoTether','6N-6P')
+#plotfacet_compare('Intact', 'LatSlideNoTether','4N-4P')
+#plotfacet_compare('Intact', 'LatSlideNoTether','5N-5P')
+#plotfacet_compare('Intact', 'LatSlideNoTether','6N-6P')
 
 #Comparing Intact - LatSlideTether
-plotfacet_compare('Intact', 'LatSlideTether','4N-4P')
-plotfacet_compare('Intact', 'LatSlideTether','5N-5P')
-plotfacet_compare('Intact', 'LatSlideTether','6N-6P')
+#plotfacet_compare('Intact', 'LatSlideTether','4N-4P')
+#plotfacet_compare('Intact', 'LatSlideTether','5N-5P')
+#plotfacet_compare('Intact', 'LatSlideTether','6N-6P')
 
 #Comparing Intact - SlideSlideNoTether model
 #plotfacet_compare('Intact', 'SlideSlideNoTether','4N-4P')
@@ -575,3 +644,8 @@ plotfacet_compare('Intact', 'LatSlideTether','6N-6P')
 #plotfacet_compare('Intact', 'SlideSlideTether','4N-4P')
 #plotfacet_compare('Intact', 'SlideSlideTether','5N-5P')
 #plotfacet_compare('Intact', 'SlideSlideTether','6N-6P')
+
+#For PDR Presentation
+
+plotfacet_PDR('Intact', 'LatSlideNoTether', '4N-4P')
+plotfacet_PDR('Intact', 'LatSlideNoTether', '5N-5P')

@@ -5,6 +5,7 @@ import itertools
 import tkinter as tk
 from tkinter import filedialog
 
+##
 #extension,(4N),data,converted,to,degrees
 tc=np.array([2,2.05,2.1,2.15,2.2,2.25,2.30198,2.35365,2.40358,2.45421,2.50322,2.55384,2.60384,2.65565,2.70225,2.75206,2.80139,2.85108,2.90339,2.95085,3])
 ur1c= np.array([-0.0319997,-0.036271,-0.0484189,-0.0657312,-0.0871508,-0.112005,-0.140835,-0.171156,-0.2013,-0.232071,-0.261775,-0.292244,-0.322156,-0.352609,-0.379413,-0.406835,-0.432487,-0.455979,-0.478146,-0.496726,-0.515118])
@@ -65,8 +66,24 @@ u1c6=np.concatenate((np.flip(ur1c6[2:21]),ur1d6))
 u2c6=np.concatenate((np.flip(ur2c6[2:21]),ur2d6))
 u3c6=np.concatenate((np.flip(ur3c6[2:21]),ur3d6))
 
+
+def export_to_excel(file, sheet, X_vals, Y_vals, Z_vals, time):
+    data = {
+        "Time" : time,
+        "X": X_vals,
+        "Y": Y_vals,
+        "Z": Z_vals
+    }
+
+    df = pd.DataFrame([data])
+
+    df.to_excel(file, sheet, index = False)
+
+
+
 plots = np.linspace(1,3,3)
-print(plots)
+
+export_to_excel("New_ROM\Data Files\IntactROM.xlsx", "4N-4P", u1z, u2z, u3z, t3)
 
 fig, axs = plt.subplots(3, 1, figsize=(10, 13), sharex=True)
 

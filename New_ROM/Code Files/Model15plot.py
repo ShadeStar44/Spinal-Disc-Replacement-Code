@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import itertools
 import tkinter as tk
+import os
 from tkinter import filedialog
 
 ##
@@ -66,8 +67,11 @@ u1c6=np.concatenate((np.flip(ur1c6[2:21]),ur1d6))
 u2c6=np.concatenate((np.flip(ur2c6[2:21]),ur2d6))
 u3c6=np.concatenate((np.flip(ur3c6[2:21]),ur3d6))
 
+print(len(u1z))
+print(type(u1z))
+print(u1z.shape)
 
-def export_to_excel(file, sheet, X_vals, Y_vals, Z_vals, time):
+def export_to_excel(writer, sheet, X_vals, Y_vals, Z_vals, time):
     data = {
         "Time" : time,
         "X": X_vals,
@@ -75,15 +79,23 @@ def export_to_excel(file, sheet, X_vals, Y_vals, Z_vals, time):
         "Z": Z_vals
     }
 
-    df = pd.DataFrame([data])
+    df = pd.DataFrame(data)
 
-    df.to_excel(file, sheet, index = False)
+    df.to_excel(writer, sheet, index = False)
+
 
 
 
 plots = np.linspace(1,3,3)
 
-export_to_excel("New_ROM\Data Files\IntactROM.xlsx", "4N-4P", u1z, u2z, u3z, t3)
+file_path = "New_ROM\Data Files\IntactROM.xlsx"
+if os.path.exists(file_path):
+    os.remove(file_path)
+
+with pd.ExcelWriter(file_path, engine="xlsxwriter", mode="w") as writer:
+    export_to_excel(writer , "4N-4P", u1z, u2z, u3z, t3)
+    export_to_excel(writer , "5N-5P", u1z5, u2z5, u3z5, t3)
+    export_to_excel(writer , "6N-6P", u1c6, u2c6, u3c6, t3)
 
 fig, axs = plt.subplots(3, 1, figsize=(10, 13), sharex=True)
 

@@ -25,7 +25,7 @@ def read_file(model):
     df_all = pd.read_excel(data_path, sheet_name="4N", header=None, skiprows = 2)
     data_n = {}
     for i, label in enumerate(node_labels):
-        cols = df_all.iloc[:, i*4:(i+1)*4]
+        cols = df_all.iloc[:, i*4:(i+1)*4] 
         data_n[label] = {
             "time": cols.iloc[:, 0].to_numpy(),
             "y_vals": cols.iloc[:, 1].to_numpy(),
@@ -136,102 +136,81 @@ fcr15, scale15, theta15 = calculate_FCOR(data_n,data_p)
 print("Scale Values: ", scale15)
 print("Angle vals (deg): ", np.rad2deg(theta15))
 
-fcr15 = np.hstack(fcr15)   # shape (2, 4)
-y_vals = fcr15[0, :]
-z_vals = fcr15[1, :]
-print("Y Coords: " , y_vals)
-print("Z Coords: " , z_vals)
-x_vals = np.linspace(-20,20, len(y_vals))
+fcr15 = np.hstack(fcr15) 
+y_vals15 = fcr15[0, :]
+z_vals15 = fcr15[1, :]
+print("Y Coords: " , y_vals15)
+print("Z Coords: " , z_vals15)
+x_vals = np.linspace(0,0, len(y_vals15))
 
-plt.figure()
-plt.plot(x_vals, y_vals, marker='o', label='y')
-plt.plot(x_vals, z_vals, marker='o', label='z')
-plt.xlabel('Moment')
-plt.ylabel('Displacement from Origin (mm)')
-plt.legend()
-plt.grid(True)
+fig15 = plt.figure(1,figsize=(10,8))
+ax = fig15.add_subplot(111,projection='3d')
+
+ax.scatter(x_vals,y_vals15,z_vals15, c = 'r', marker = 'o')
+
+
+#plt.plot(x_vals, y_vals, marker='o', label='y')
+#plt.plot(x_vals, z_vals, marker='o', label='z')
+#plt.xlabel('Moment')
+#plt.ylabel('Displacement from Origin (mm)')
+#plt.legend()
+#plt.grid(True)
+#plt.show()
+
+
+
+data_n5, data_p5 = read_file("5")
+fcr5, scale5, theta5 = calculate_FCOR(data_n5, data_p5)
+print("Scale Values: ", scale5)
+print("Angle vals (deg): ", np.rad2deg(theta5))
+
+fcr1 = np.hstack(fcr5) 
+y_vals5 = fcr1[0, :]
+z_vals5 = fcr1[1, :]
+print("Y Coords: " , y_vals5)
+print("Z Coords: " , z_vals5)
+x_vals = np.linspace(0,0, len(y_vals5))
+
+fig3 = plt.figure(3,figsize=(10,8))
+ax = fig3.add_subplot(111,projection='3d')
+
+ax.scatter(x_vals,y_vals5,z_vals5, c = 'r', marker = 'o')
+
+
+data_n3, data_p3 = read_file("3")
+fcr3, scale3, theta3 = calculate_FCOR(data_n3, data_p3)
+print("Scale Values: ", scale3)
+print("Angle vals (deg): ", np.rad2deg(theta3))
+
+fcr3 = np.hstack(fcr3) 
+y_vals3 = fcr3[0, :]
+z_vals3 = fcr3[1, :]
+print("Y Coords: " , y_vals3)
+print("Z Coords: " , z_vals3)
+x_vals = np.linspace(0,0, len(y_vals3))
+
+fig3 = plt.figure(4,figsize=(10,8))
+ax = fig3.add_subplot(111,projection='3d')
+
+ax.scatter(x_vals,y_vals3,z_vals3, c = 'r', marker = 'o')
+
+
+
+data_n2, data_p2 = read_file("1")
+fcr1, scale1, theta1 = calculate_FCOR(data_n2, data_p2)
+print("Scale Values: ", scale1)
+print("Angle vals (deg): ", np.rad2deg(theta1))
+
+fcr1 = np.hstack(fcr1) 
+y_vals1 = fcr1[0, :]
+z_vals1 = fcr1[1, :]
+print("Y Coords: " , y_vals1)
+print("Z Coords: " , z_vals1)
+x_vals = np.linspace(0,0, len(y_vals1))
+
+fig1 = plt.figure(5,figsize=(10,8))
+ax = fig1.add_subplot(111,projection='3d')
+
+ax.scatter(x_vals,y_vals1,z_vals1, c = 'r', marker = 'o')
 plt.show()
 
-#data_n, data_p = read_file("14")
-#fcr14, scale14, theta14 = calculate_FCOR(data_n,data_p)
-#print(fcr14)
-#print(scale14)
-#print(theta14)
-
-#data_n1, data_p1 = read_file("13")
-#fcr13, scale13, theta13 = calculate_FCOR(data_n1, data_p1)
-#print(fcr13)
-#print(scale13)
-#print(theta13)
-
-#data_n1, data_p1 = read_file("12")
-#fcr12, scale12, theta12 = calculate_FCOR(data_n1, data_p1)
-#print(fcr12)
-#print(scale12)
-#print(theta12)
-
-#data_n1, data_p1 = read_file("11")
-#fcr11, scale11, theta11 = calculate_FCOR(data_n1, data_p1)
-#print(fcr11)
-#print(scale11)
-#print(theta11)
-
-#data_n1, data_p1 = read_file("10")
-#fcr10, scale10, theta10 = calculate_FCOR(data_n1, data_p1)
-#print(fcr10)
-#print(scale10)
-#print(theta10)
-
-#data_n1, data_p1 = read_file("9")
-#fcr9, scale9, theta9 = calculate_FCOR(data_n1, data_p1)
-#print(fcr9)
-#print(scale9)
-#print(theta9)
-
-#data_n1, data_p1 = read_file("8")
-#fcr8, scale8, theta8 = calculate_FCOR(data_n1, data_p1)
-#print(fcr8)
-#print(scale8)
-#print(theta8)
-
-#data_n1, data_p1 = read_file("7")
-#fcr7, scale7, theta7 = calculate_FCOR(data_n1, data_p1)
-#print(fcr7)
-#print(scale7)
-#print(theta7)
-
-#data_n1, data_p1 = read_file("6")
-#fcr6, scale6, theta6 = calculate_FCOR(data_n1, data_p1)
-#print(fcr6)
-#print(scale6)
-#print(theta6)
-
-#data_n1, data_p1 = read_file("5")
-#fcr5, scale5, theta5 = calculate_FCOR(data_n1, data_p1)
-#print(fcr5)
-#print(scale5)
-#print(theta5)
-
-#data_n1, data_p1 = read_file("4")
-#fcr4, scale4, theta4 = calculate_FCOR(data_n1, data_p1)
-#print(fcr4)
-#print(scale4)
-#print(theta4)
-
-#data_n1, data_p1 = read_file("3")
-#fcr3, scale3, theta3 = calculate_FCOR(data_n1, data_p1)
-#print(fcr3)
-#print(scale3)
-#print(theta3)
-
-#data_n1, data_p1 = read_file("2")
-#fcr2, scale2, theta2 = calculate_FCOR(data_n1, data_p1)
-#print(fcr2)
-#print(scale2)
-#print(theta2)
-
-#data_n1, data_p1 = read_file("1")
-#fcr1, scale1, theta1 = calculate_FCOR(data_n1, data_p1)
-#print(fcr1)
-#print(scale1)
-#print(theta1)

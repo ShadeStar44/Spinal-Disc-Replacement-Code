@@ -49,6 +49,9 @@ ur3d6=np.array([0.012901,0.0167372,0.0282509,0.0407853,0.0578091,0.0661457,0.083
 ur1d6=ur1d6*180/np.pi+.0621789
 ur2d6=ur2d6*180/np.pi+-.000881437
 ur3d6=ur3d6*180/np.pi+-.012901
+
+
+
 #4N & 4P
 u1z= np.concatenate((np.flip(ur1c[2:21]),ur1d))
 u2z= np.concatenate((np.flip(ur2c[2:21]),ur2d))

@@ -19,6 +19,7 @@ ALPHA_MAX = TARGET_TORQUE / MOMENT_OF_INERTIA  # rad/s²
 
 # Desired motion duration
 TOTAL_DURATION = 30.0  # seconds
+RETURN_DURATION = 5.0  # seconds to return to home
 
 # ---------------- Conversion functions ----------------
 def linear_steps(x):
@@ -70,7 +71,7 @@ if file_path:
                 if dt <= 0:
                     dt = 1e-6
 
-                # max allowed angular change (rad) based on torque
+                # max allowed angular change (rad)
                 dtheta_max = ALPHA_MAX * dt
                 max_delta_steps = rad_to_steps(dtheta_max)
 
@@ -90,6 +91,13 @@ if file_path:
 
             data[col] = steps_list
             data[col + "_torque_Nm"] = TARGET_TORQUE
+
+    # ---------------- Append Return-to-Home ----------------
+    # Copy first row to return to home
+    home_row = data.iloc[0].copy()
+    last_time = data["Time"].iloc[-1]
+    home_row["Time"] = last_time + RETURN_DURATION  # return over 5 seconds
+    data = pd.concat([data, home_row.to_frame().T], ignore_index=True)
 
     # ---------------- Save Output ----------------
     save_path = filedialog.asksaveasfilename(

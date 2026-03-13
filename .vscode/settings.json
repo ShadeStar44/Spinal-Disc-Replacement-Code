@@ -3,7 +3,12 @@
         {
             "path": "",
             "envManager": "ms-python.python:system",
-            "packageManager": "ms-python.python:pip"
+            "packageManager": "ms-python.python:pip",
+            "python.defaultInterpreterPath": "C:\\Users\\olson\\scoop\\apps\\python313\\current\\python.exe"
+            
         }
-    ]
+    ],
+    "idf.currentSetup": "C:\\esp\\v5.5.3\\esp-idf",
+    "idf.flashType": "UART",
+    "idf.portWin": "COM3"
 }

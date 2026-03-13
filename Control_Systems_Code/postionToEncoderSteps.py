@@ -3,109 +3,105 @@ from tkinter import filedialog
 import pandas as pd
 import numpy as np
 
-# ---------------- Motor configuration ----------------
-STEPS_PER_REV = 200
-MICROSTEP = 16
-LEAD = 4  # mm/rev for linear axes
+# ---------------- USER SETTINGS ----------------
+angular_speed = 5  # deg/sec
 
-STEPS_PER_REV_EFFECTIVE = STEPS_PER_REV * MICROSTEP
-LINEAR_STEPS_PER_MM = STEPS_PER_REV_EFFECTIVE / LEAD
-ANG_STEPS_PER_DEG = STEPS_PER_REV_EFFECTIVE / 360
+xCol = "X (U1)"
+yCol = "Y (U2)"
+zCol = "Z (U3)"
+angleCol = "Angle"
 
-# Rotational torque limit
-TARGET_TORQUE = 1.0       # Nm
-MOMENT_OF_INERTIA = 0.01  # kg·m²
-ALPHA_MAX = TARGET_TORQUE / MOMENT_OF_INERTIA  # rad/s²
+# mechanical constants
+lead = 4
+steps_per_rev = 200
+steps_per_mm = steps_per_rev / lead
+steps_per_deg = 1 / 1.8
 
-# Desired motion duration
-TOTAL_DURATION = 30.0  # seconds
-RETURN_DURATION = 5.0  # seconds to return to home
-
-# ---------------- Conversion functions ----------------
-def linear_steps(x):
-    return int(round(x * LINEAR_STEPS_PER_MM))
-
-def rad_to_steps(x):
-    deg = np.degrees(x)
-    return int(round(deg * ANG_STEPS_PER_DEG))
-
-# ---------------- Tkinter Setup ----------------
-root = tk.Tk()
-root.withdraw()
-
-# ---------------- File Selection ----------------
-file_path = filedialog.askopenfilename(
-    title="Select Abaqus trajectory file",
-    filetypes=[("CSV files","*.csv"),("All files","*.*")]
-)
-
-if file_path:
-
-    df = pd.read_csv(file_path)
-    data = df.copy()
-
-    # ---------------- Rescale timestamps ----------------
-    t0 = data["Time"].iloc[0]
-    t_end = data["Time"].iloc[-1]
-    original_duration = t_end - t0 if t_end - t0 > 0 else 1e-6
-    data["Time"] = ((data["Time"] - t0) / original_duration) * TOTAL_DURATION
-
-    # ---------------- Linear axes ----------------
-    linear_axes = ["X (U1)", "Y (U2)"]
-    for col in linear_axes:
-        if col in data.columns:
-            data[col] = data[col].apply(linear_steps)
-
-    # ---------------- Rotational axes ----------------
-    rotational_axes = ["UR1", "UR2"]
-    for col in rotational_axes:
-        if col in data.columns:
-            steps_list = []
-            prev_steps = rad_to_steps(data[col].iloc[0])
-            prev_time = data["Time"].iloc[0]
-            steps_list.append(prev_steps)
-
-            for idx in range(1, len(data)):
-                t = data["Time"].iloc[idx]
-                dt = t - prev_time
-                if dt <= 0:
-                    dt = 1e-6
-
-                # max allowed angular change (rad)
-                dtheta_max = ALPHA_MAX * dt
-                max_delta_steps = rad_to_steps(dtheta_max)
-
-                desired_steps = rad_to_steps(data[col].iloc[idx])
-                delta_steps = desired_steps - prev_steps
-
-                # Clip to torque-based delta
-                if delta_steps > max_delta_steps:
-                    delta_steps = max_delta_steps
-                elif delta_steps < -max_delta_steps:
-                    delta_steps = -max_delta_steps
-
-                new_steps = prev_steps + delta_steps
-                steps_list.append(new_steps)
-                prev_steps = new_steps
-                prev_time = t
-
-            data[col] = steps_list
-            data[col + "_torque_Nm"] = TARGET_TORQUE
-
-    # ---------------- Append Return-to-Home ----------------
-    # Copy first row to return to home
-    home_row = data.iloc[0].copy()
-    last_time = data["Time"].iloc[-1]
-    home_row["Time"] = last_time + RETURN_DURATION  # return over 5 seconds
-    data = pd.concat([data, home_row.to_frame().T], ignore_index=True)
-
-    # ---------------- Save Output ----------------
-    save_path = filedialog.asksaveasfilename(
-        title="Save converted file",
-        defaultextension=".csv",
+# ---------------- FILE DIALOG ----------------
+def open_file():
+    return filedialog.askopenfilename(
+        title="Select Abaqus trajectory file",
         filetypes=[("CSV files","*.csv"),("All files","*.*")]
     )
 
-    if save_path:
-        data.to_csv(save_path, index=False)
-        print("Conversion complete! File saved at:", save_path)
+def save_file():
+    return filedialog.asksaveasfilename(
+        title="Save motion file",
+        defaultextension=".csv"
+    )
+
+# ---------------- LOAD DATA ----------------
+file_path = open_file()
+
+data = pd.read_csv(file_path)
+
+print("Detected columns:", data.columns.tolist())
+
+# ---------------- POSITION DIFFERENCES ----------------
+dx = data[xCol].diff().fillna(0)
+dy = data[yCol].diff().fillna(0)
+dz = data[zCol].diff().fillna(0)
+da = data[angleCol].diff().fillna(0)
+
+# ---------------- CONVERT TO STEPS ----------------
+sx = dx * steps_per_mm
+sy = dy * steps_per_mm
+sz = dz * steps_per_mm
+sa = da * steps_per_deg
+
+# ---------------- TIME FROM ANGULAR SPEED ----------------
+segment_time = abs(da) / angular_speed
+segment_time.replace(0, np.nan, inplace=True)
+segment_time = segment_time.bfill()
+
+# ---------------- FRACTIONAL STEP ACCUMULATION ----------------
+accX = accY = accZ = accA = 0
+
+motion_segments = []
+
+for i in range(len(data)):
+
+    accX += sx.iloc[i]
+    accY += sy.iloc[i]
+    accZ += sz.iloc[i]
+    accA += sa.iloc[i]
+
+    stepX = int(accX)
+    stepY = int(accY)
+    stepZ = int(accZ)
+    stepA = int(accA)
+
+    accX -= stepX
+    accY -= stepY
+    accZ -= stepZ
+    accA -= stepA
+
+    if stepX == 0 and stepY == 0 and stepZ == 0 and stepA == 0:
+        continue
+
+    motion_segments.append([
+        stepX,
+        stepY,
+        stepZ,
+        stepA,
+        segment_time.iloc[i]
+    ])
+
+# ---------------- SAVE OUTPUT ----------------
+traj_df = pd.DataFrame(
+    motion_segments,
+    columns=[
+        "dx_steps",
+        "dy_steps",
+        "dz_steps",
+        "da_steps",
+        "segment_time"
+    ]
+)
+
+save_path = save_file()
+
+traj_df.to_csv(save_path,index=False)
+
+print("Motion file saved:", save_path)
+print("Segments generated:", len(traj_df))

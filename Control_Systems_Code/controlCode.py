@@ -1,111 +1,123 @@
-import board
-import busio
-import digitalio
+# main.py
+
 import time
-import csv
 import pwmio
+import digitalio
+import board
+import csv
 
-from adafruit_bno08x.i2c import BNO08X_I2C
-from adafruit_bno08x import (
-    BNO_REPORT_ACCELEROMETER,
-    BNO_REPORT_GYROSCOPE,
-    BNO_REPORT_ROTATION_VECTOR,
-)
-
-# ---------------- PWM OUTPUTS ----------------
-# 1 kHz PWM for analog converter modules
+# ---------------- PWM SETUP ----------------
 x_pwm = pwmio.PWMOut(board.D14, frequency=1000, duty_cycle=0)
 y_pwm = pwmio.PWMOut(board.D15, frequency=1000, duty_cycle=0)
 a_pwm = pwmio.PWMOut(board.D16, frequency=1000, duty_cycle=0)
 
-# ---------------- DIRECTION PIN ----------------
+# ---------------- DIRECTION ----------------
 dir_pin = digitalio.DigitalInOut(board.D18)
 dir_pin.direction = digitalio.Direction.OUTPUT
-dir_pin.value = True   # all motors same direction
+dir_pin.value = True  # single direction for all axes
 
-# ---------------- I2C IMU SETUP ----------------
-i2c = busio.I2C(board.SCL, board.SDA)
-imu = BNO08X_I2C(i2c)
+# ---------------- CONTROL STATE ----------------
+run_state = {
+    "running": False,
+    "paused": False,
+    "current_step": 0,
+    "trajectory": []
+}
 
-imu.enable_feature(BNO_REPORT_ACCELEROMETER)
-imu.enable_feature(BNO_REPORT_GYROSCOPE)
-imu.enable_feature(BNO_REPORT_ROTATION_VECTOR)
+DT = 0.01  # 100 Hz control loop
 
-print("IMU initialized")
-
-# ---------------- CSV FILES ----------------
-motion_file = "/Test1.csv"
-log_file = "/motion_imu_log.csv"
-
-# create log file
-with open(log_file, "w") as f:
-    writer = csv.writer(f)
-    writer.writerow([
-        "timestamp",
-        "vx","vy","va",
-        "ax","ay","az",
-        "gx","gy","gz",
-        "qx","qy","qz","qw"
-    ])
-
-# ---------------- PWM HELPER ----------------
+# ---------------- UTILITY ----------------
 def set_pwm(pwm, value):
-    """
-    value: 0.0 to 1.0 (normalized speed)
-    """
-    value = max(0.0, min(1.0, value))  # clamp
+    """Set PWM duty cycle 0-1"""
+    value = max(0.0, min(1.0, value))
     pwm.duty_cycle = int(value * 65535)
 
-# ---------------- LOAD TRAJECTORY ----------------
-trajectory = []
+def load_trajectory(file_path):
+    """Load trajectory CSV: vx, vy, va normalized 0-1"""
+    traj = []
+    with open(file_path, "r") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            try:
+                vx = float(row["vx"])
+                vy = float(row["vy"])
+                va = float(row["va"])
+                traj.append((vx, vy, va))
+            except:
+                continue
+    run_state["trajectory"] = traj
+    run_state["current_step"] = 0
+    print(f"Loaded {len(traj)} steps.")
 
-with open(motion_file) as f:
-    reader = csv.DictReader(f)
+# ---------------- USER COMMANDS ----------------
+def start():
+    run_state["running"] = True
+    run_state["paused"] = False
+    print("Trajectory started.")
 
-    for row in reader:
-        trajectory.append([
-            float(row["vx"]),   # normalized 0–1
-            float(row["vy"]),
-            float(row["va"])
-        ])
+def stop():
+    run_state["running"] = False
+    run_state["paused"] = False
+    run_state["current_step"] = 0
+    set_pwm(x_pwm, 0)
+    set_pwm(y_pwm, 0)
+    set_pwm(a_pwm, 0)
+    print("Trajectory stopped and reset.")
 
-print("Trajectory loaded:", len(trajectory))
+def pause():
+    if run_state["running"]:
+        run_state["paused"] = True
+        print("Trajectory paused.")
 
-# ---------------- EXECUTION LOOP ----------------
-start_time = time.monotonic()
+def resume():
+    if run_state["running"] and run_state["paused"]:
+        run_state["paused"] = False
+        print("Trajectory resumed.")
 
-for step in trajectory:
+# ---------------- MANUAL JOG ----------------
+# axis = 'x','y','a', direction = 1 or -1, distance in mm
+def move_axis(axis, direction, distance_mm):
+    if distance_mm < 0.1:
+        print("Minimum move is 0.1 mm")
+        return
+    duty = min(distance_mm / 10, 1.0)  # normalize for PWM (example scaling)
+    if axis == 'x':
+        set_pwm(x_pwm, duty if direction > 0 else 0)
+    elif axis == 'y':
+        set_pwm(y_pwm, duty if direction > 0 else 0)
+    elif axis == 'a':
+        set_pwm(a_pwm, duty if direction > 0 else 0)
+    else:
+        print("Invalid axis. Use 'x','y','a'")
+        return
+    print(f"Moved axis {axis} {'+' if direction>0 else '-'}{distance_mm} mm")
+    time.sleep(distance_mm / 50)  # crude timing for movement
+    set_pwm(x_pwm, 0)
+    set_pwm(y_pwm, 0)
+    set_pwm(a_pwm, 0)
 
-    vx, vy, va = step
+# ---------------- CONTROL LOOP ----------------
+def control_loop():
+    while True:
+        start_time = time.monotonic()
 
-    # apply PWM speeds
-    set_pwm(x_pwm, vx)
-    set_pwm(y_pwm, vy)
-    set_pwm(a_pwm, va)
+        if run_state["running"] and not run_state["paused"]:
+            traj = run_state["trajectory"]
+            idx = run_state["current_step"]
 
-    # read IMU
-    ax, ay, az = imu.acceleration
-    gx, gy, gz = imu.gyro
-    qx, qy, qz, qw = imu.quaternion
+            if idx < len(traj):
+                vx, vy, va = traj[idx]
+                set_pwm(x_pwm, vx)
+                set_pwm(y_pwm, vy)
+                set_pwm(a_pwm, va)
+                run_state["current_step"] += 1
+            else:
+                # finished
+                print("Trajectory complete")
+                stop()
 
-    timestamp = time.monotonic() - start_time
-
-    # log data
-    with open(log_file, "a") as f:
-        writer = csv.writer(f)
-        writer.writerow([
-            timestamp,
-            vx, vy, va,
-            ax, ay, az,
-            gx, gy, gz,
-            qx, qy, qz, qw
-        ])
-
-    time.sleep(0.01)  # control update rate (100 Hz)
-
-# stop motors
-set_pwm(x_pwm, 0)
-set_pwm(y_pwm, 0)
-set_pwm(a_pwm, 0)
-
-print("Motion complete")
+        # fixed timestep
+        elapsed = time.monotonic() - start_time
+        sleep_time = DT - elapsed
+        if sleep_time > 0:
+            time.sleep(sleep_time)

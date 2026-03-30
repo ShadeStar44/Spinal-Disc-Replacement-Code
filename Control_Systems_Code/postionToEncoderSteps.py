@@ -2,106 +2,134 @@ import tkinter as tk
 from tkinter import filedialog
 import pandas as pd
 import numpy as np
+import struct
 
-# ---------------- USER SETTINGS ----------------
+# ---------------- SETTINGS ----------------
 angular_speed = 5  # deg/sec
+DT = 0.01
+
+RAMP_TIME = 0.5
+
+MAX_PWM = 65535
+MAX_LINEAR_SPEED = 50
+MAX_ANGULAR_SPEED = 10
 
 xCol = "X (U1)"
 yCol = "Y (U2)"
 zCol = "Z (U3)"
 angleCol = "Angle"
 
-# mechanical constants
-lead = 4
-steps_per_rev = 200
-steps_per_mm = steps_per_rev / lead
-steps_per_deg = 1 / 1.8
-
-# ---------------- FILE DIALOG ----------------
-def open_file():
-    return filedialog.askopenfilename(
-        title="Select Abaqus trajectory file",
-        filetypes=[("CSV files","*.csv"),("All files","*.*")]
-    )
-
-def save_file():
-    return filedialog.asksaveasfilename(
-        title="Save motion file",
-        defaultextension=".csv"
-    )
-
-# ---------------- LOAD DATA ----------------
-file_path = open_file()
-
+# ---------------- LOAD ----------------
+file_path = filedialog.askopenfilename()
 data = pd.read_csv(file_path)
 
-print("Detected columns:", data.columns.tolist())
+angle = data[angleCol].values
+x = data[xCol].values
+y = data[yCol].values
+z = data[zCol].values
 
-# ---------------- POSITION DIFFERENCES ----------------
-dx = data[xCol].diff().fillna(0)
-dy = data[yCol].diff().fillna(0)
-dz = data[zCol].diff().fillna(0)
-da = data[angleCol].diff().fillna(0)
+# ---------------- INTERPOLATION ----------------
+x_func = lambda a: np.interp(a, angle, x)
+y_func = lambda a: np.interp(a, angle, y)
+z_func = lambda a: np.interp(a, angle, z)
 
-# ---------------- CONVERT TO STEPS ----------------
-sx = dx * steps_per_mm
-sy = dy * steps_per_mm
-sz = dz * steps_per_mm
-sa = da * steps_per_deg
+# ---------------- S CURVE ----------------
+def s_curve(t):
+    return 3*t**2 - 2*t**3
 
-# ---------------- TIME FROM ANGULAR SPEED ----------------
-segment_time = abs(da) / angular_speed
-segment_time.replace(0, np.nan, inplace=True)
-segment_time = segment_time.bfill()
+# ---------------- TIME SETUP ----------------
+theta_start = angle[0]
+theta_end = angle[-1]
+total_angle = theta_end - theta_start
 
-# ---------------- FRACTIONAL STEP ACCUMULATION ----------------
-accX = accY = accZ = accA = 0
+total_time = total_angle / angular_speed
+
+ramp_steps = int(RAMP_TIME / DT)
+total_steps = int(total_time / DT)
 
 motion_segments = []
 
-for i in range(len(data)):
+theta = theta_start
 
-    accX += sx.iloc[i]
-    accY += sy.iloc[i]
-    accZ += sz.iloc[i]
-    accA += sa.iloc[i]
+def to_pwm(v, max_v):
+    return int(min(abs(v) / max_v, 1.0) * MAX_PWM)
 
-    stepX = int(accX)
-    stepY = int(accY)
-    stepZ = int(accZ)
-    stepA = int(accA)
+# ---------------- MAIN MOTION ----------------
+for i in range(total_steps):
 
-    accX -= stepX
-    accY -= stepY
-    accZ -= stepZ
-    accA -= stepA
+    if i < ramp_steps:
+        scale = s_curve(i / ramp_steps)
+    elif i > total_steps - ramp_steps:
+        scale = s_curve((total_steps - i) / ramp_steps)
+    else:
+        scale = 1.0
 
-    if stepX == 0 and stepY == 0 and stepZ == 0 and stepA == 0:
-        continue
+    omega = angular_speed * scale
+    theta_next = theta + omega * DT
 
-    motion_segments.append([
-        stepX,
-        stepY,
-        stepZ,
-        stepA,
-        segment_time.iloc[i]
-    ])
+    x1 = x_func(theta)
+    y1 = y_func(theta)
+    z1 = z_func(theta)
 
-# ---------------- SAVE OUTPUT ----------------
-traj_df = pd.DataFrame(
-    motion_segments,
-    columns=[
-        "dx_steps",
-        "dy_steps",
-        "dz_steps",
-        "da_steps",
-        "segment_time"
-    ]
-)
+    x2 = x_func(theta_next)
+    y2 = y_func(theta_next)
+    z2 = z_func(theta_next)
 
-save_path = save_file()
+    vx = (x2 - x1) / DT
+    vy = (y2 - y1) / DT
+    vz = (z2 - z1) / DT
+    va = omega
 
-traj_df.to_csv(save_path,index=False)
+    direction = 1 if omega >= 0 else 0
 
-print("Motion file saved:", save_path)
-print("Segments generated:", len(traj_df))
+    motion_segments.append((vx, vy, vz, va, direction))
+
+    theta = theta_next
+
+# ---------------- RETURN MOTION ----------------
+print("Adding return motion...")
+
+return_steps = int(total_time / DT)
+theta_return = theta
+
+for i in range(return_steps):
+
+    if i < ramp_steps:
+        scale = s_curve(i / ramp_steps)
+    elif i > return_steps - ramp_steps:
+        scale = s_curve((return_steps - i) / ramp_steps)
+    else:
+        scale = 1.0
+
+    omega = -angular_speed * scale
+    theta_next = theta_return + omega * DT
+
+    x1 = x_func(theta_return)
+    y1 = y_func(theta_return)
+    z1 = z_func(theta_return)
+
+    x2 = x_func(theta_next)
+    y2 = y_func(theta_next)
+    z2 = z_func(theta_next)
+
+    vx = (x2 - x1) / DT
+    vy = (y2 - y1) / DT
+    vz = (z2 - z1) / DT
+    va = omega
+
+    direction = 1 if omega >= 0 else 0
+
+    motion_segments.append((vx, vy, vz, va, direction))
+
+    theta_return = theta_next
+
+# ---------------- SAVE BINARY ----------------
+save_path = filedialog.asksaveasfilename(defaultextension=".bin")
+
+with open(save_path, "wb") as f:
+    for vx, vy, vz, va, d in motion_segments:
+        f.write(struct.pack("<ffffB", vx, vy, vz, va, d))
+
+print("Saved binary motion file")
+print("Steps:", len(motion_segments))
+print("Bytes:", len(motion_segments) * 17)

@@ -1,22 +1,25 @@
-# This file is executed on every boot (including wake-boot from deepsleep)
 import webrepl
+
+try:
+    import network
+    import time
+
+    sta = network.WLAN(network.STA_IF)
+    sta.active(True)
+
+    if not sta.isconnected():
+        sta.connect("SSID", "PASSWORD")
+
+        for _ in range(10):
+            if sta.isconnected():
+                break
+            time.sleep(0.5)
+
+    print("WiFi OK:", sta.isconnected())
+    if sta.isconnected():
+        print("IP:", sta.ifconfig()[0])
+
+except Exception as e:
+    print("Boot error:", e)
+
 webrepl.start()
-import time
-import controller
-
-run_program = False
-
-def start():
-    global run_program
-    run_program = True
-
-def stop():
-    global run_program
-    run_program = False
-
-while True:
-    
-    if run_program:
-        controller.run()
-    
-    time.sleep(0.2)

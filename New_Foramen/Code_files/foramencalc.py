@@ -13,9 +13,21 @@ def read_file(model):
     #----- Loading Facet Labels -----
     df_all = pd.read_excel(data_path, sheet_name="4N", header=None)
     #Get node labels
-    node_labels = df_all.iloc[2].dropna().tolist()  # row 3  
+    node_labels = df_all.iloc[2].dropna().tolist()
     print("Node Labels Found:", node_labels) 
- 
+
+    
+    orig_coords = {}
+    for i, label in enumerate(node_labels):
+        cols = df_all.iloc[3, i*5: (i+1) *5]
+        orig_coords[label] = {
+            "x_val": float(cols.iloc[1]),
+            "y_val": float(cols.iloc[2]),
+            "z_val": float(cols.iloc[3])
+        }
+
+    print("Orig Coordinates Found:", orig_coords)
+
     #Reading 'N' data
     df_all = pd.read_excel(data_path, sheet_name="4N", header=None, skiprows = 5)
     data_4n = {}
@@ -26,7 +38,12 @@ def read_file(model):
             "x_vals": cols.iloc[:,1].to_numpy(),
             "y_vals": cols.iloc[:, 2].to_numpy(),
             "z_vals": cols.iloc[:, 3].to_numpy()
+            
         } 
+        data_4n[label]["x_vals"] = orig_coords[label]["x_val"] + data_4n[label]["x_vals"]
+        data_4n[label]["y_vals"] = orig_coords[label]["y_val"] + data_4n[label]["y_vals"]
+        data_4n[label]["z_vals"] = orig_coords[label]["z_val"] + data_4n[label]["z_vals"]
+    
     
     #Reading 'P' data
     df_all = pd.read_excel(data_path, sheet_name="4P", header=None, skiprows = 5)
@@ -39,9 +56,10 @@ def read_file(model):
             "y_vals": cols.iloc[:, 2].to_numpy(),
             "z_vals": cols.iloc[:, 3].to_numpy()
         } 
-    
+        data_4p[label]["x_vals"] = orig_coords[label]["x_val"] + data_4p[label]["x_vals"]
+        data_4p[label]["y_vals"] = orig_coords[label]["y_val"] + data_4p[label]["y_vals"]
+        data_4p[label]["z_vals"] = orig_coords[label]["z_val"] + data_4p[label]["z_vals"]
 
-        #Reading 'N' data
     df_all = pd.read_excel(data_path, sheet_name="5N", header=None, skiprows = 5)
     data_5n = {}
     for i, label in enumerate(node_labels):
@@ -52,8 +70,11 @@ def read_file(model):
             "y_vals": cols.iloc[:, 2].to_numpy(),
             "z_vals": cols.iloc[:, 3].to_numpy()
         } 
+        data_5n[label]["x_vals"] = orig_coords[label]["x_val"] + data_5n[label]["x_vals"]
+        data_5n[label]["y_vals"] = orig_coords[label]["y_val"] + data_5n[label]["y_vals"]
+        data_5n[label]["z_vals"] = orig_coords[label]["z_val"] + data_5n[label]["z_vals"]
 
-        #Reading 'P' data
+
     df_all = pd.read_excel(data_path, sheet_name="5P", header=None, skiprows = 5)
     data_5p = {}
     for i, label in enumerate(node_labels):
@@ -64,7 +85,9 @@ def read_file(model):
             "y_vals": cols.iloc[:, 2].to_numpy(),
             "z_vals": cols.iloc[:, 3].to_numpy()
         } 
-
+        data_5p[label]["x_vals"] = orig_coords[label]["x_val"] + data_5p[label]["x_vals"]
+        data_5p[label]["y_vals"] = orig_coords[label]["y_val"] + data_5p[label]["y_vals"]
+        data_5p[label]["z_vals"] = orig_coords[label]["z_val"] + data_5p[label]["z_vals"]
 
     #Reading 'N' data
     df_all = pd.read_excel(data_path, sheet_name="6N", header=None, skiprows = 5)
@@ -77,8 +100,10 @@ def read_file(model):
             "y_vals": cols.iloc[:, 2].to_numpy(),
             "z_vals": cols.iloc[:, 3].to_numpy()
         } 
+        data_6n[label]["x_vals"] = orig_coords[label]["x_val"] + data_6n[label]["x_vals"]
+        data_6n[label]["y_vals"] = orig_coords[label]["y_val"] + data_6n[label]["y_vals"]
+        data_6n[label]["z_vals"] = orig_coords[label]["z_val"] + data_6n[label]["z_vals"]
 
-        #Reading 'P' data
     df_all = pd.read_excel(data_path, sheet_name="6P", header=None, skiprows = 5)
     data_6p = {}
     for i, label in enumerate(node_labels):
@@ -89,7 +114,9 @@ def read_file(model):
             "y_vals": cols.iloc[:, 2].to_numpy(),
             "z_vals": cols.iloc[:, 3].to_numpy()
         } 
-
+        data_6p[label]["x_vals"] = orig_coords[label]["x_val"] + data_6p[label]["x_vals"]
+        data_6p[label]["y_vals"] = orig_coords[label]["y_val"] + data_6p[label]["y_vals"]
+        data_6p[label]["z_vals"] = orig_coords[label]["z_val"] + data_6p[label]["z_vals"]
 
     print("Data Read Succesfully")
     return data_4n, data_4p, data_5n, data_5p, data_6n, data_6p
@@ -202,7 +229,8 @@ def inscribe_circle_calc(data_n,data_p, LU, LL, RU, RL):
 
 data_4n15, data_4p15, data_5n15, data_5p15, data_6n15, data_6p15 = read_file("15")
 t = np.concatenate((-np.flip(data_4n15[14886]["time"]), data_4p15[14886]["time"][1:]))
-"""
+
+
     #C34
 areas4np_15c34L, radii4np_15c34L, centers4np_15c34L = inscribe_circle_calc(data_4n15,data_4p15, 14886, 1297, 16439, 17116)
 areas5np_15c34L, radii5np_15c34L, centers5np_15c34L = inscribe_circle_calc(data_5n15,data_5p15, 14886, 1297, 16439, 17116)
@@ -317,7 +345,7 @@ axs[2].legend()
 
 fig15_56.savefig(f"New_Foramen/Plots/Model 15/Inscr_for_area_15_c56.jpg", dpi = 300)
 
-
+"""
 #-------------------------- Model 1 -------------------------------------------------------
 data_4n1, data_4p1, data_5n1, data_5p1, data_6n1, data_6p1 = read_file("1")
 t = np.concatenate((-np.flip(data_4n1[14886]["time"]), data_4p1[14886]["time"][1:]))
@@ -1449,7 +1477,7 @@ axs[2].grid(True)
 axs[2].legend()
 
 fig10_34.savefig(f"New_Foramen/Plots/Model 10/Inscr_for_area_10_c34.jpg", dpi = 300)
-"
+
     #C45
 
 areas4np_10c45L, radii4np_10c45L, centers4np_10c45L = inscribe_circle_calc(data_4n10,data_4p10, 52345, 16215, 36615, 37435)
@@ -2019,7 +2047,6 @@ axs[2].grid(True)
 axs[2].legend()
 
 fig14_56.savefig(f"New_Foramen/Plots/Model 14/Inscr_for_area_14_c56.jpg", dpi = 300)
-
+"""
 plt.show()
 
-"""

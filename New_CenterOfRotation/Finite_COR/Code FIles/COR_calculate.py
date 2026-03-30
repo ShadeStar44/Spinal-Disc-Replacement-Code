@@ -5,6 +5,7 @@ import itertools
 import tkinter as tk
 from tkinter import filedialog
 from pathlib import Path
+from scipy import linalg
 #authors: @amladow
 
 #========================================================================================================================
@@ -476,16 +477,16 @@ def fcor_slice(y_n_left, y_p_left, z_n_left, z_p_left,
     B2 = B - meanB
 
     #.conj gets the matrices conjugate, least squares solution to get the angle
-    x = (B2.conj() @ A2) / (B2.conj() @ B2)
+    x = (B2.conj() @ A2)
     theta = np.angle(x)
-    scale = np.abs(x)
+    scale = 1.00
 
     #Defining optimal rotation matrix
     R = np.array([
         [np.cos(theta), -np.sin(theta)],
         [np.sin(theta),  np.cos(theta)]
     ])
-
+    """
     #Optimal translation vector
     v = np.array([meanA.real, meanA.imag]) - np.array([meanB.real, meanB.imag]) @ R.T
 
@@ -496,6 +497,24 @@ def fcor_slice(y_n_left, y_p_left, z_n_left, z_p_left,
     fcr = np.zeros((2,1))
     fcr[0,0] = (v[0] - v[1] / denom) / 2
     fcr[1,0] = (v[1] + v[0] / denom) / 2
+
+    
+    return fcr, scale, theta
+    """
+    meanA_vec = np.array([meanA.real, meanA.imag])
+    meanB_vec = np.array([meanB.real, meanB.imag])
+
+    # Translation vector for A = R B + t
+    t = meanA_vec - R @ meanB_vec
+
+    I = np.eye(2)
+    M = I - R
+
+    # Detect pure translation
+    if np.linalg.cond(M) > 1e6:
+        return None, scale, theta
+
+    fcr = np.linalg.solve(M, t).reshape(2, 1)
 
     return fcr, scale, theta
 
@@ -574,15 +593,15 @@ def calculate_FCOR_5n5p(data_n, data_p):
 
 def calculate_FCOR_4n4p_C34(data_n, data_p):
 
-    y_n_left = data_n[ 11026]["y_vals"]
-    y_p_left = data_p[ 11026]["y_vals"]
-    z_n_left = data_n[ 11026]["z_vals"]
-    z_p_left = data_p[ 11026]["z_vals"]
+    y_n_left = data_n[ 13917]["y_vals"]
+    y_p_left = data_p[ 13917]["y_vals"]
+    z_n_left = data_n[ 13917]["z_vals"]
+    z_p_left = data_p[ 13917]["z_vals"]
 
-    y_n_right = data_n[ 27976]["y_vals"]
-    y_p_right = data_p[ 27976]["y_vals"]
-    z_n_right = data_n[ 27976]["z_vals"]
-    z_p_right = data_p[ 27976]["z_vals"]
+    y_n_right = data_n[ 31579]["y_vals"]
+    y_p_right = data_p[ 31579]["y_vals"]
+    z_n_right = data_n[ 31579]["z_vals"]
+    z_p_right = data_p[ 31579]["z_vals"]
 
     N = len(y_n_left)
     print(N)
@@ -645,15 +664,15 @@ def calculate_FCOR_5n5p_C34(data_n, data_p):
 
 def calculate_FCOR_4n4p_C56(data_n, data_p):
 
-    y_n_left = data_n[ 48021]["y_vals"]
-    y_p_left = data_p[ 48021]["y_vals"]
-    z_n_left = data_n[ 48021]["z_vals"]
-    z_p_left = data_p[ 48021]["z_vals"]
+    y_n_left = data_n[ 51195]["y_vals"]
+    y_p_left = data_p[ 51195]["y_vals"]
+    z_n_left = data_n[ 51195]["z_vals"]
+    z_p_left = data_p[ 51195]["z_vals"]
 
-    y_n_right = data_n[ 75173]["y_vals"]
-    y_p_right = data_p[ 75173]["y_vals"]
-    z_n_right = data_n[ 75173]["z_vals"]
-    z_p_right = data_p[ 75173]["z_vals"]
+    y_n_right = data_n[ 79455]["y_vals"]
+    y_p_right = data_p[ 79455]["y_vals"]
+    z_n_right = data_n[ 79455]["z_vals"]
+    z_p_right = data_p[ 79455]["z_vals"]
 
     N = len(y_n_left)
     print(N)
@@ -1119,7 +1138,7 @@ fig1_5.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 1/C45/Model_1_COR_5N
 # ------ C3-4 COR Values -------
 
 
-"""
+
 data_4n15, data_4p15, data_5n15, data_5p15= read_file34_15("15")
 fcr15_4, scale15_4, theta15_4 = calculate_FCOR_4n4p_C34(data_4n15, data_4p15)
 fcr15_5, scale15_5, theta15_5 = calculate_FCOR_5n5p_C34(data_5n15, data_5p15)
@@ -1144,7 +1163,7 @@ for i in range(len(y_vals15_4)):
         x_vals[i], 
         y_vals15_4[i], 
         z_vals15_4[i],
-        f"{i}({x_vals[i]:.2f}, {y_vals15_4[i]:.2f}, {z_vals15_4[i]:.2f})",
+        f"{i}: ({x_vals[i]:.2f}, {y_vals15_4[i]:.2f}, {z_vals15_4[i]:.2f})",
         fontsize=8
     )
 
@@ -1172,7 +1191,7 @@ for i in range(len(x_vals15_5)):
         y_vals[i], 
         x_vals15_5[i], 
         z_vals15_5[i],
-        f"{i}({x_vals15_5[i]:.2f}, {y_vals[i]:.2f}, {z_vals15_5[i]:.2f})",
+        f"{i}: ({x_vals15_5[i]:.2f}, {y_vals[i]:.2f}, {z_vals15_5[i]:.2f})",
         fontsize=8
     )
 
@@ -1183,7 +1202,7 @@ ax15_5.set_title("Model 15 C34 5n/5p")
 
 plt.show()
 fig15_5.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 15/C34/Model_15_COR_5N5P_C34.png', dpi = 300)
-
+"""
 
 data_4n1, data_4p1, data_5n1, data_5p1= read_file34_1("1")
 fcr1_4, scale1_4, theta1_4 = calculate_FCOR_4n4p_C34(data_4n1, data_4p1)
@@ -1509,11 +1528,11 @@ ax14_5.set_title("Model 14 C34 5n/5p")
 
 plt.show()
 fig14_5.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 14/C34/Model_14_COR_5N5P_C34.png', dpi = 300)
-"""
 
+"""
 # --- C56 Plots -------
 
-"""
+
 data_4n15, data_4p15, data_5n15, data_5p15= read_file56_15("15")
 fcr15_4, scale15_4, theta15_4 = calculate_FCOR_4n4p_C56(data_4n15, data_4p15)
 fcr15_5, scale15_5, theta15_5 = calculate_FCOR_5n5p_C56(data_5n15, data_5p15)
@@ -1578,7 +1597,7 @@ ax15_5.set_title("Model 15 C56 5n/5p")
 plt.show()
 fig15_5.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 15/C56/Model_15_COR_5N5P_C56.png', dpi = 300)
 
-
+"""
 
 data_4n1, data_4p1, data_5n1, data_5p1= read_file56_15("1")
 fcr1_4, scale1_4, theta1_4 = calculate_FCOR_4n4p_C56(data_4n1, data_4p1)
@@ -1839,7 +1858,7 @@ ax5_5.set_title("Model 5 C56 5n/5p")
 
 plt.show()
 fig5_5.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 5/C56/Model_5_COR_5N5P_C56.png', dpi = 300)
-"""
+
 
 data_4n14, data_4p14, data_5n14, data_5p14= read_file56_15("14")
 fcr14_4, scale14_4, theta14_4 = calculate_FCOR_4n4p_C56(data_4n14, data_4p14)
@@ -1904,3 +1923,4 @@ ax14_5.set_title("Model 14 C56 5n/5p")
 
 plt.show()
 fig14_5.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 14/C56/Model_14_COR_5N5P_C56.png', dpi = 300)
+"""

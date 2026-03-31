@@ -606,5 +606,5 @@ plotfacet_compare('Intact', 'SlideSlideTether','5N-5P')
 plotfacet_compare('Intact', 'SlideSlideTether','6N-6P')
 """
 
-C34_left, C34_right, C45_left, C45_right, C56_left, C56_right = RMSE('Intact', 'SlideSlideTether', '6N-6P')
+C34_left, C34_right, C45_left, C45_right, C56_left, C56_right = RMSE('Intact', 'SlideSlideTether', '4N-4P')
 print(C34_left, C34_right, C45_left, C45_right, C56_left, C56_right)

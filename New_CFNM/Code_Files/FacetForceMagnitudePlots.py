@@ -329,7 +329,118 @@ def plotfacet_compare(model1, model2, motion):
     plt.show()
     fig.savefig(f"New_CFNM/Plots/Comparative/{model1}-{model2}/{model1}-{model2}-{motion}.png", dpi = 300)
 
+def RMSE(model1, model2, motion):
+    #Read in data for desired two models to be compared
+    data4p_1, data4n_1, data5p_1, data5n_1, data6p_1, data6n_1, facet_pairs = read_directory(model1)
+    data4p_2, data4n_2, data5p_2, data5n_2, data6p_2, data6n_2, facet_pairs = read_directory(model2)
 
+    #Specify desired motion, decides what will be plotted
+    if (motion == '4N-4P'):
+        data_n_1 = data4n_1
+        data_p_1 = data4p_1
+
+        data_n_2 = data4n_2
+        data_p_2 = data4p_2
+    elif (motion == '5N-5P'):
+        data_n_1 = data5n_1
+        data_p_1 = data5p_1
+        
+        data_n_2 = data5n_2
+        data_p_2 = data5p_2
+    elif (motion == '6N-6P'):
+        data_n_1 = data6n_1
+        data_p_1 = data6p_1
+
+        data_n_2 = data6n_2
+        data_p_2 = data6p_2
+
+    #Hardcoded values for moment, still couldn't figure out why it's not reading right
+    moment = [-1.92, -1.81, -1.71, -1.61, -1.52, -1.41, -1.32, -1.22, -1.13, 
+              -1.02, -0.96, -0.80, -0.72, -0.64, -0.54, -0.43, -0.33, -0.21, -0.12, 
+               0, 0.12, 0.21, 0.33, 0.43, 0.54, 0.64, 0.72, 0.80, 0.96, 
+               1.02, 1.13, 1.22, 1.32, 1.41, 1.52, 1.61, 1.71, 1.81, 1.92]
+
+    #Iterate through all facet pairs
+    for left, right in facet_pairs:
+        if left.startswith('3'): #if C34 disc values, plot data on left and right plot
+            leftyn1 = data_n_1[left]["CFNM"]
+            leftyp1 = data_p_1[left]["CFNM"]
+            rightyn1 = data_n_1[right]["CFNM"]
+            rightyp1 = data_p_1[right]["CFNM"]
+
+            leftyn2 = data_n_2[left]["CFNM"]
+            leftyp2 = data_p_2[left]["CFNM"]
+            rightyn2 = data_n_2[right]["CFNM"]
+            rightyp2 = data_p_2[right]["CFNM"]
+
+        elif left.startswith('4'): #If C45 disc values, plot data on left and right plot
+            leftyn3 = data_n_1[left]["CFNM"]
+            leftyp3 = data_p_1[left]["CFNM"]
+            rightyn3 = data_n_1[right]["CFNM"]
+            rightyp3 = data_p_1[right]["CFNM"]
+
+            leftyn4 = data_n_2[left]["CFNM"]
+            leftyp4 = data_p_2[left]["CFNM"]
+            rightyn4 = data_n_2[right]["CFNM"]
+            rightyp4 = data_p_2[right]["CFNM"]
+
+            
+        elif left.startswith('5'): #If C56 disc values, plot data on left and right plot
+            leftyn5 = data_n_1[left]["CFNM"]
+            leftyp5 = data_p_1[left]["CFNM"]
+            rightyn5 = data_n_1[right]["CFNM"]
+            rightyp5 = data_p_1[right]["CFNM"]
+
+            leftyn6 = data_n_2[left]["CFNM"]
+            leftyp6 = data_p_2[left]["CFNM"]
+            rightyn6 = data_n_2[right]["CFNM"]
+            rightyp6 = data_p_2[right]["CFNM"]
+            
+    lefty1 = np.concatenate((np.flip(leftyn1[0:20]), leftyp1[1:20]))
+    righty1 = np.concatenate((np.flip(rightyn1[0:20]), rightyp1[1:20]))
+
+    lefty2 = np.concatenate((np.flip(leftyn2[0:20]), leftyp2[1:20]))
+    righty2 = np.concatenate((np.flip(rightyn2[0:20]), rightyp2[1:20]))
+        
+    lefty3 = np.concatenate((np.flip(leftyn3[0:20]), leftyp3[1:20]))
+    righty3 = np.concatenate((np.flip(rightyn3[0:20]), rightyp3[1:20]))
+
+    lefty4 = np.concatenate((np.flip(leftyn4[0:20]), leftyp4[1:20]))
+    righty4 = np.concatenate((np.flip(rightyn4[0:20]), rightyp4[1:20]))
+
+    lefty5 = np.concatenate((np.flip(leftyn5[0:20]), leftyp5[1:20]))
+    righty5 = np.concatenate((np.flip(rightyn5[0:20]), rightyp5[1:20]))
+
+    lefty6 = np.concatenate((np.flip(leftyn6[0:20]), leftyp6[1:20]))
+    righty6 = np.concatenate((np.flip(rightyn6[0:20]), rightyp6[1:20]))
+
+    difference1_left = np.zeros(len(lefty1))
+    difference2_left = np.zeros(len(lefty1))
+    difference3_left = np.zeros(len(lefty1))
+
+    difference1_right = np.zeros(len(lefty1))
+    difference2_right = np.zeros(len(lefty1))
+    difference3_right = np.zeros(len(lefty1))
+
+    for i in range(len(lefty1)):
+        difference1_left[i] = lefty1[i] - lefty2[i]
+        difference2_left[i] = lefty3[i] - lefty4[i]
+        difference3_left[i] = lefty5[i] - lefty6[i]
+
+        difference1_right[i] = righty1[i] - righty2[i]
+        difference2_right[i] = righty3[i] - righty4[i]
+        difference3_right[i] = righty5[i] - righty6[i]
+            
+    RMSE_C34_left = np.sqrt((1/len(lefty1))*np.sum(difference1_left)**2)
+    RMSE_C34_right = np.sqrt((1/len(righty1))*np.sum(difference1_right)**2)
+
+    RMSE_C45_left = np.sqrt((1/len(lefty1))*np.sum(difference2_left)**2)
+    RMSE_C45_right = np.sqrt((1/len(righty1))*np.sum(difference2_right)**2)
+
+    RMSE_C56_left = np.sqrt((1/len(lefty1))*np.sum(difference3_left)**2)
+    RMSE_C56_right = np.sqrt((1/len(righty1))*np.sum(difference3_right)**2)
+
+    return RMSE_C34_left, RMSE_C34_right, RMSE_C45_left, RMSE_C45_right, RMSE_C56_left, RMSE_C56_right
 
 # ===========================================
 # Plot All Facet Pairs For Individual Models
@@ -417,7 +528,7 @@ def plotfacet_compare(model1, model2, motion):
 #=========================================
 
 #Comparing Intact - FixedNoTether model
-plotfacet_compare('Intact', 'FixedNoTether','4N-4P')
+""" plotfacet_compare('Intact', 'FixedNoTether','4N-4P')
 plotfacet_compare('Intact', 'FixedNoTether','5N-5P')
 plotfacet_compare('Intact', 'FixedNoTether','6N-6P')
 
@@ -485,3 +596,7 @@ plotfacet_compare('Intact', 'SlideSlideNoTether','6N-6P')
 plotfacet_compare('Intact', 'SlideSlideTether','4N-4P')
 plotfacet_compare('Intact', 'SlideSlideTether','5N-5P')
 plotfacet_compare('Intact', 'SlideSlideTether','6N-6P')
+ """
+
+C34_left, C34_right, C45_left, C45_right, C56_left, C56_right = RMSE('Intact', 'SlideSlideTether', '4N-4P')
+print(C34_left, C45_left, C56_left, C34_right, C45_right, C56_right)

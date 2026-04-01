@@ -80,7 +80,7 @@ for i in range(total_steps):
     vz = (z2 - z1) / DT
     va = omega
 
-    direction = 1 if omega >= 0 else 0
+    direction = 0 if omega >= 0 else 1
 
     motion_segments.append((vx, vy, vz, va, direction))
 

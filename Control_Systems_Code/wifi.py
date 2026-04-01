@@ -1,7 +1,7 @@
 import json
 config = {
-    "ssid": "CN-926Main",
-    "password": "WylieRemiD1ce"
+    "ssid": "Guest",
+    "password": ""
 }
 
 with open("wifi.json", "w") as f:

@@ -1,18 +1,15 @@
 import time
-import controller
+import controlCode
 
-# expose controller to REPL
+# expose controlCode to REPL
 import builtins
-builtins.start = controller.start
-builtins.stop = controller.stop
-builtins.pause = controller.pause
-builtins.resume = controller.resume
-builtins.jog_x = controller.jog_x
-builtins.jog_y = controller.jog_y
-builtins.jog_z = controller.jog_z
+builtins.start = controlCode.start
+builtins.stop = controlCode.stop
+builtins.pause = controlCode.pause
+builtins.resume = controlCode.resume
+builtins.move_axis = controlCode.move_axis
+builtins.background_loop = controlCode.background_loop
+builtins.load_trajectory = controlCode.load_trajectory
+
 
 print("System ready")
-
-while True:
-    controller.run()
-    time.sleep(0.01)

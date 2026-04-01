@@ -118,7 +118,7 @@ def read_file(model):
     data_6p = {}
     for i, label in enumerate(facet_labels):
         cols = df_all.iloc[:, i*5:(i+1)*5]
-        data_5p[label] = {
+        data_6p[label] = {
             "time": cols.iloc[:, 0].to_numpy(),
             "XN1": cols.iloc[:, 1].to_numpy(),
             "XN2": cols.iloc[:, 2].to_numpy(),
@@ -402,7 +402,7 @@ def RMSE(model1, model2, motion):
 
 (RMSE_C34_left_XN1, RMSE_C34_right_XN1, RMSE_C34_left_XN2, RMSE_C34_right_XN2, RMSE_C34_left_XN3, RMSE_C34_right_XN3, 
     RMSE_C45_left_XN1, RMSE_C45_right_XN1, RMSE_C45_left_XN2, RMSE_C45_right_XN2, RMSE_C45_left_XN3, RMSE_C45_right_XN3,
-    RMSE_C56_left_XN1, RMSE_C56_right_XN1, RMSE_C56_left_XN2, RMSE_C56_right_XN2, RMSE_C56_left_XN3, RMSE_C56_right_XN3) = RMSE('15', '1', '4N-4P')
+    RMSE_C56_left_XN1, RMSE_C56_right_XN1, RMSE_C56_left_XN2, RMSE_C56_right_XN2, RMSE_C56_left_XN3, RMSE_C56_right_XN3) = RMSE('15', '1', '6N-6P')
 
 print((RMSE_C34_left_XN1, RMSE_C34_right_XN1, RMSE_C34_left_XN2, RMSE_C34_right_XN2, RMSE_C34_left_XN3, RMSE_C34_right_XN3, 
     RMSE_C45_left_XN1, RMSE_C45_right_XN1, RMSE_C45_left_XN2, RMSE_C45_right_XN2, RMSE_C45_left_XN3, RMSE_C45_right_XN3,

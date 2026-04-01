@@ -157,7 +157,7 @@ def RMSE(model1, model2, motion):
 
 
     #Iterate through all facet pairs
-    for left,right in facet_pairs:
+    for left, right in facet_pairs:
         if left.startswith('C3'): #if C34 disc values, plot data on left and right plot
             left_n_XN1_C3 = data_n_1[left]["XN1"]
             left_p_XN1_C3 = data_p_1[left]["XN1"]

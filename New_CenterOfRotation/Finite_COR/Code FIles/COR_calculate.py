@@ -22,18 +22,31 @@ def read_file(model):
     node_labels = df_all.iloc[0].dropna().tolist()  # row 4 (index=3 in zero-based)
     print("Node Labels Found:", node_labels)
 
+    orig_coords = {}
+    for i, label in enumerate(node_labels):
+        cols = df_all.iloc[3, i*5: (i+1) *5]
+        orig_coords[label] = {
+            "x_val": float(cols.iloc[1]),
+            "y_val": float(cols.iloc[2]),
+            "z_val": float(cols.iloc[3])
+        }
+
+
     #Reading 'N' data
     df_all = pd.read_excel(data_path, sheet_name="4N", header=None, skiprows = 2)
-    data_n = {}
+    data_4n = {}
     for i, label in enumerate(node_labels):
         cols = df_all.iloc[:, i*4:(i+1)*4] 
-        data_n[label] = {
+        data_4n[label] = {
             "time": cols.iloc[:, 0].to_numpy(),
             "y_vals": cols.iloc[:, 1].to_numpy(),
             "z_vals": cols.iloc[:, 2].to_numpy()
         } 
-    
-    #Reading 'P' data
+        data_4n[label]["x_vals"] = orig_coords[label]["x_val"] + data_4n[label]["x_vals"]
+        data_4n[label]["y_vals"] = orig_coords[label]["y_val"] + data_4n[label]["y_vals"]
+        data_4n[label]["z_vals"] = orig_coords[label]["z_val"] + data_4n[label]["z_vals"]
+
+    #Reading 'P' dta
     df_all = pd.read_excel(data_path, sheet_name="4P", header=None, skiprows = 2)
     data_p = {}
     for i, label in enumerate(node_labels):
@@ -45,7 +58,7 @@ def read_file(model):
         } 
     
     print("Data Read Succesfully")
-    return data_n, data_p
+    return data_4n, data_p
 
 def read_file45_1(model):
 
@@ -55,7 +68,16 @@ def read_file45_1(model):
     #Get node labels
     node_labels = df_all.iloc[2].dropna().tolist()  # row 3  
     print("Node Labels Found:", node_labels) 
- 
+
+    orig_coords = {}
+    for i, label in enumerate(node_labels):
+        cols = df_all.iloc[3, i*5: (i+1) *5]
+        orig_coords[label] = {
+            "x_val": float(cols.iloc[1]),
+            "y_val": float(cols.iloc[2]),
+            "z_val": float(cols.iloc[3])
+        }
+    print('Orig Coords:', orig_coords)
     #Reading 'N' data
     df_all = pd.read_excel(data_path, sheet_name="4N", header=None, skiprows = 5)
     data_4n = {}
@@ -66,7 +88,9 @@ def read_file45_1(model):
             "y_vals": cols.iloc[:, 2].to_numpy(),
             "z_vals": cols.iloc[:, 3].to_numpy()
         } 
-    
+        data_4n[label]["y_vals"] = orig_coords[label]["y_val"] + data_4n[label]["y_vals"]
+        data_4n[label]["z_vals"] = orig_coords[label]["z_val"] + data_4n[label]["z_vals"]
+
     #Reading 'P' data
     df_all = pd.read_excel(data_path, sheet_name="4P", header=None, skiprows = 5)
     data_4p = {}
@@ -77,7 +101,8 @@ def read_file45_1(model):
             "y_vals": cols.iloc[:, 2].to_numpy(),
             "z_vals": cols.iloc[:, 3].to_numpy()
         } 
-    
+        data_4p[label]["y_vals"] = orig_coords[label]["y_val"] + data_4p[label]["y_vals"]
+        data_4p[label]["z_vals"] = orig_coords[label]["z_val"] + data_4p[label]["z_vals"]
 
         #Reading 'N' data
     df_all = pd.read_excel(data_path, sheet_name="5N", header=None, skiprows = 5)
@@ -89,7 +114,8 @@ def read_file45_1(model):
             "x_vals": cols.iloc[:, 1].to_numpy(),
             "z_vals": cols.iloc[:, 3].to_numpy()
         } 
-
+        data_5n[label]["x_vals"] = orig_coords[label]["x_val"] + data_5n[label]["x_vals"]
+        data_5n[label]["z_vals"] = orig_coords[label]["z_val"] + data_5n[label]["z_vals"]
         #Reading 'P' data
     df_all = pd.read_excel(data_path, sheet_name="5P", header=None, skiprows = 5)
     data_5p = {}
@@ -100,6 +126,8 @@ def read_file45_1(model):
             "x_vals": cols.iloc[:, 1].to_numpy(),
             "z_vals": cols.iloc[:, 3].to_numpy()
         } 
+        data_5p[label]["x_vals"] = orig_coords[label]["x_val"] + data_5p[label]["x_vals"]
+        data_5p[label]["z_vals"] = orig_coords[label]["z_val"] + data_5p[label]["z_vals"]
 
     print("Data Read Succesfully")
     return data_4n, data_4p, data_5n, data_5p
@@ -112,7 +140,16 @@ def read_file45_3(model):
     #Get node labels
     node_labels = df_all.iloc[2].dropna().tolist()  # row 3  
     print("Node Labels Found:", node_labels) 
- 
+
+    orig_coords = {}
+    for i, label in enumerate(node_labels):
+        cols = df_all.iloc[3, i*5: (i+1) *5]
+        orig_coords[label] = {
+            "x_val": float(cols.iloc[1]),
+            "y_val": float(cols.iloc[2]),
+            "z_val": float(cols.iloc[3])
+        }
+    print('Orig Coords:', orig_coords)
     #Reading 'N' data
     df_all = pd.read_excel(data_path, sheet_name="4N", header=None, skiprows = 2)
     data_4n = {}
@@ -122,7 +159,9 @@ def read_file45_3(model):
             "time": cols.iloc[:, 0].to_numpy(),
             "y_vals": cols.iloc[:, 1].to_numpy(),
             "z_vals": cols.iloc[:, 2].to_numpy()
-        } 
+        }
+        data_4n[label]["y_vals"] = orig_coords[label]["y_val"] + data_4n[label]["y_vals"]
+        data_4n[label]["z_vals"] = orig_coords[label]["z_val"] + data_4n[label]["z_vals"]
     
     #Reading 'P' data
     df_all = pd.read_excel(data_path, sheet_name="4P", header=None, skiprows = 2)
@@ -134,7 +173,8 @@ def read_file45_3(model):
             "y_vals": cols.iloc[:, 1].to_numpy(),
             "z_vals": cols.iloc[:, 2].to_numpy()
         } 
-    
+        data_4p[label]["y_vals"] = orig_coords[label]["y_val"] + data_4p[label]["y_vals"]
+        data_4p[label]["z_vals"] = orig_coords[label]["z_val"] + data_4p[label]["z_vals"]
 
         #Reading 'N' data
     df_all = pd.read_excel(data_path, sheet_name="5N", header=None, skiprows = 5)
@@ -146,6 +186,8 @@ def read_file45_3(model):
             "x_vals": cols.iloc[:, 1].to_numpy(),
             "z_vals": cols.iloc[:, 3].to_numpy()
         } 
+        data_5n[label]["x_vals"] = orig_coords[label]["x_val"] + data_5n[label]["x_vals"]
+        data_5n[label]["z_vals"] = orig_coords[label]["z_val"] + data_5n[label]["z_vals"]
 
         #Reading 'P' data
     df_all = pd.read_excel(data_path, sheet_name="5P", header=None, skiprows = 5)
@@ -157,7 +199,8 @@ def read_file45_3(model):
             "x_vals": cols.iloc[:, 1].to_numpy(),
             "z_vals": cols.iloc[:, 3].to_numpy()
         } 
-
+        data_5p[label]["x_vals"] = orig_coords[label]["x_val"] + data_5p[label]["x_vals"]
+        data_5p[label]["z_vals"] = orig_coords[label]["z_val"] + data_5p[label]["z_vals"]
  
     print("Data Read Succesfully")
     return data_4n, data_4p, data_5n, data_5p
@@ -170,7 +213,18 @@ def read_file45_15(model):
     #Get node labels
     node_labels = df_all.iloc[2].dropna().tolist()  # row 3  
     print("Node Labels Found:", node_labels) 
- 
+    
+
+    orig_coords = {}
+    for i, label in enumerate(node_labels):
+        cols = df_all.iloc[3, i*5: (i+1) *5]
+        orig_coords[label] = {
+            "x_val": float(cols.iloc[1]),
+            "y_val": float(cols.iloc[2]),
+            "z_val": float(cols.iloc[3])
+        }
+    print('Orig Coords:', orig_coords)
+
     #Reading 'N' data
     df_all = pd.read_excel(data_path, sheet_name="4N", header=None, skiprows = 5)
     data_4n = {}
@@ -181,7 +235,9 @@ def read_file45_15(model):
             "y_vals": cols.iloc[:, 2].to_numpy(),
             "z_vals": cols.iloc[:, 3].to_numpy()
         } 
-    
+        data_4n[label]["y_vals"] = orig_coords[label]["y_val"] + data_4n[label]["y_vals"]
+        data_4n[label]["z_vals"] = orig_coords[label]["z_val"] + data_4n[label]["z_vals"]
+
     #Reading 'P' data
     df_all = pd.read_excel(data_path, sheet_name="4P", header=None, skiprows = 2)
     data_4p = {}
@@ -192,7 +248,8 @@ def read_file45_15(model):
             "y_vals": cols.iloc[:, 1].to_numpy(),
             "z_vals": cols.iloc[:, 2].to_numpy()
         } 
-    
+        data_4p[label]["y_vals"] = orig_coords[label]["y_val"] + data_4p[label]["y_vals"]
+        data_4p[label]["z_vals"] = orig_coords[label]["z_val"] + data_4p[label]["z_vals"]
 
         #Reading 'N' data
     df_all = pd.read_excel(data_path, sheet_name="5N", header=None, skiprows = 5)
@@ -204,8 +261,10 @@ def read_file45_15(model):
             "x_vals": cols.iloc[:, 1].to_numpy(),
             "z_vals": cols.iloc[:, 3].to_numpy()
         } 
-
+        data_5n[label]["x_vals"] = orig_coords[label]["x_val"] + data_5n[label]["x_vals"]
+        data_5n[label]["z_vals"] = orig_coords[label]["z_val"] + data_5n[label]["z_vals"]
         #Reading 'P' data
+
     df_all = pd.read_excel(data_path, sheet_name="5P", header=None, skiprows = 5)
     data_5p = {}
     for i, label in enumerate(node_labels):
@@ -215,7 +274,8 @@ def read_file45_15(model):
             "x_vals": cols.iloc[:, 1].to_numpy(),
             "z_vals": cols.iloc[:, 3].to_numpy()
         } 
-
+        data_5p[label]["x_vals"] = orig_coords[label]["x_val"] + data_5p[label]["x_vals"]
+        data_5p[label]["z_vals"] = orig_coords[label]["z_val"] + data_5p[label]["z_vals"]
  
     print("Data Read Succesfully")
     return data_4n, data_4p, data_5n, data_5p
@@ -517,6 +577,7 @@ def fcor_slice(y_n_left, y_p_left, z_n_left, z_p_left,
     fcr = np.linalg.solve(M, t).reshape(2, 1)
 
     return fcr, scale, theta
+    
 
 
 def calculate_FCOR_4n4p(data_n, data_p):
@@ -558,25 +619,25 @@ def calculate_FCOR_4n4p(data_n, data_p):
 
 def calculate_FCOR_5n5p(data_n, data_p):
 
-    x_n_left = data_n[ 49903]["x_vals"]
-    x_p_left = data_p[ 49903]["x_vals"]
-    z_n_left = data_n[ 49903]["z_vals"]
-    z_p_left = data_p[ 49903]["z_vals"]
+    x_n_left = data_n[ 52027]["x_vals"]
+    x_p_left = data_p[ 52027]["x_vals"]
+    z_n_left = data_n[ 52027]["z_vals"]
+    z_p_left = data_p[ 52027]["z_vals"]
 
-    x_n_right = data_n[ 29005]["x_vals"]
-    x_p_right = data_p[ 29005]["x_vals"]
-    z_n_right = data_n[ 29005]["z_vals"]
-    z_p_right = data_p[ 29005]["z_vals"]
+    x_n_right = data_n[ 31067]["x_vals"]
+    x_p_right = data_p[ 31067]["x_vals"]
+    z_n_right = data_n[ 31067]["z_vals"]
+    z_p_right = data_p[ 31067]["z_vals"]
 
     N = len(x_n_left)
     print(N)
-    split = N // 4
+    split = N // 5
 
     fcr_all = []
     theta_all = []
     scale_all = []
 
-    for i in range(4):
+    for i in range(5):
         start = i * split #start index at desired spot
 
         fcr, scale, theta = fcor_slice(x_n_left, x_p_left, z_n_left, z_p_left,
@@ -628,15 +689,15 @@ def calculate_FCOR_4n4p_C34(data_n, data_p):
 
 def calculate_FCOR_5n5p_C34(data_n, data_p):
 
-    x_n_left = data_n[ 11026]["x_vals"]
-    x_p_left = data_p[ 11026]["x_vals"]
-    z_n_left = data_n[ 11026]["z_vals"]
-    z_p_left = data_p[ 11026]["z_vals"]
+    x_n_left = data_n[ 13917]["x_vals"]
+    x_p_left = data_p[ 13917]["x_vals"]
+    z_n_left = data_n[ 13917]["z_vals"]
+    z_p_left = data_p[ 13917]["z_vals"]
 
-    x_n_right = data_n[ 27976]["x_vals"]
-    x_p_right = data_p[ 27976]["x_vals"]
-    z_n_right = data_n[ 27976]["z_vals"]
-    z_p_right = data_p[ 27976]["z_vals"]
+    x_n_right = data_n[ 31579]["x_vals"]
+    x_p_right = data_p[ 31579]["x_vals"]
+    z_n_right = data_n[ 31579]["z_vals"]
+    z_p_right = data_p[ 31579]["z_vals"]
 
     N = len(x_n_left)
     print(N)
@@ -734,8 +795,8 @@ def calculate_FCOR_5n5p_C56(data_n, data_p):
 
 
 # ------ C4-5 COR Values ------
-
 """
+
 data_4n15, data_4p15, data_5n15, data_5p15= read_file45_15("15")
 fcr15_4, scale15_4, theta15_4 = calculate_FCOR_4n4p(data_4n15, data_4p15)
 fcr15_5, scale15_5, theta15_5 = calculate_FCOR_5n5p(data_5n15, data_5p15)
@@ -1133,11 +1194,526 @@ ax1_5.set_title("Model 1 C45 5n/5p")
 
 plt.show()
 fig1_5.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 1/C45/Model_1_COR_5N5P.png', dpi = 300)
+
+
+data_4n2, data_4p2, data_5n2, data_5p2= read_file45_3("2")
+fcr2_4, scale2_4, theta2_4 = calculate_FCOR_4n4p(data_4n2, data_4p2)
+fcr2_5, scale2_5, theta2_5 = calculate_FCOR_5n5p(data_5n2, data_5p2)
+print("Scale Values: ", scale2_4)
+print("Angle vals (deg): ", np.rad2deg(theta2_4))
+
+fcr2_4 = np.hstack(fcr2_4) 
+y_vals2_4 = fcr2_4[0, :]
+z_vals2_4 = fcr2_4[1, :]
+print("Y Coords: " , y_vals2_4)
+print("Z Coords: " , z_vals2_4)
+x_vals = np.linspace(0,0, len(y_vals2_4))
+
+fig2_4 = plt.figure(5,figsize=(10,8))
+ax2_4 = fig2_4.add_subplot(111,projection='3d')
+fig2_4.canvas.manager.set_window_title('Model 2 C45 4n/4p')
+ax2_4.scatter(x_vals,y_vals2_4,z_vals2_4, c = 'r', marker = 'o')
+
+offset = 0.01
+for i in range(len(y_vals2_4)):
+    ax2_4.text(
+        x_vals[i], 
+        y_vals2_4[i], 
+        z_vals2_4[i],
+        f"{i}({x_vals[i]:.2f}, {y_vals2_4[i]:.2f}, {z_vals2_4[i]:.2f})",
+        fontsize=8
+    )
+
+ax2_4.set_xlabel("X-Axis (Locked)")
+ax2_4.set_ylabel("Y-Axis (mm)")
+ax2_4.set_zlabel("Z-Axis (mm)")
+ax2_4.set_title("Model 2 C45 4n/4p")
+plt.show()
+fig2_4.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 2/C45/Model_2_COR_4N4P.png', dpi = 300)
+
+fcr2_5 = np.hstack(fcr2_5) 
+x_vals2_5 = fcr2_5[0, :]
+z_vals2_5 = fcr2_5[1, :]
+print("X Coords: " , x_vals2_5)
+print("Z Coords: " , z_vals2_5)
+
+y_vals = np.linspace(0,0, len(x_vals2_5))
+fig2_5 = plt.figure(5,figsize=(10,8))
+ax2_5 = fig2_5.add_subplot(111,projection='3d')
+fig2_5.canvas.manager.set_window_title('Model 2 C45 5n/5p')
+ax2_5.scatter(y_vals,x_vals2_5,z_vals2_5, c = 'r', marker = 'o')
+
+for i in range(len(x_vals2_5)):
+    ax2_5.text(
+        y_vals[i], 
+        x_vals2_5[i], 
+        z_vals2_5[i],
+        f"{i}({x_vals2_5[i]:.2f}, {y_vals[i]:.2f}, {z_vals2_5[i]:.2f})",
+        fontsize=8
+    )
+
+ax2_5.set_xlabel("Y-Axis (locked)")
+ax2_5.set_ylabel("X-Axis (mm)")
+ax2_5.set_zlabel("Z-Axis (mm)")
+ax2_5.set_title("Model 2 C45 5n/5p")
+
+plt.show()
+fig2_5.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 2/C45/Model_2_COR_5N5P.png', dpi = 300)
+
+data_4n6, data_4p6, data_5n6, data_5p6= read_file45_3("6")
+fcr6_4, scale6_4, theta6_4 = calculate_FCOR_4n4p(data_4n6, data_4p6)
+fcr6_5, scale6_5, theta6_5 = calculate_FCOR_5n5p(data_5n6, data_5p6)
+print("Scale Values: ", scale6_4)
+print("Angle vals (deg): ", np.rad2deg(theta6_4))
+
+fcr6_4 = np.hstack(fcr6_4) 
+y_vals6_4 = fcr6_4[0, :]
+z_vals6_4 = fcr6_4[1, :]
+print("Y Coords: " , y_vals6_4)
+print("Z Coords: " , z_vals6_4)
+x_vals = np.linspace(0,0, len(y_vals6_4))
+
+fig6_4 = plt.figure(5,figsize=(10,8))
+ax6_4 = fig6_4.add_subplot(111,projection='3d')
+fig6_4.canvas.manager.set_window_title('Model 6 C45 4n/4p')
+ax6_4.scatter(x_vals,y_vals6_4,z_vals6_4, c = 'r', marker = 'o')
+
+offset = 0.01
+for i in range(len(y_vals6_4)):
+    ax6_4.text(
+        x_vals[i], 
+        y_vals6_4[i], 
+        z_vals6_4[i],
+        f"{i}({x_vals[i]:.2f}, {y_vals6_4[i]:.2f}, {z_vals6_4[i]:.2f})",
+        fontsize=8
+    )
+
+ax6_4.set_xlabel("X-Axis (Locked)")
+ax6_4.set_ylabel("Y-Axis (mm)")
+ax6_4.set_zlabel("Z-Axis (mm)")
+ax6_4.set_title("Model 6 C45 4n/4p")
+plt.show()
+fig6_4.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 6/C45/Model_6_COR_4N4P.png', dpi = 300)
+
+fcr6_5 = np.hstack(fcr6_5) 
+x_vals6_5 = fcr6_5[0, :]
+z_vals6_5 = fcr6_5[1, :]
+print("X Coords: " , x_vals6_5)
+print("Z Coords: " , z_vals6_5)
+
+y_vals = np.linspace(0,0, len(x_vals6_5))
+fig6_5 = plt.figure(5,figsize=(10,8))
+ax6_5 = fig6_5.add_subplot(111,projection='3d')
+fig6_5.canvas.manager.set_window_title('Model 6 C45 5n/5p')
+ax6_5.scatter(y_vals,x_vals6_5,z_vals6_5, c = 'r', marker = 'o')
+
+for i in range(len(x_vals6_5)):
+    ax6_5.text(
+        y_vals[i], 
+        x_vals6_5[i], 
+        z_vals6_5[i],
+        f"{i}({x_vals6_5[i]:.2f}, {y_vals[i]:.2f}, {z_vals6_5[i]:.2f})",
+        fontsize=8
+    )
+
+ax6_5.set_xlabel("Y-Axis (locked)")
+ax6_5.set_ylabel("X-Axis (mm)")
+ax6_5.set_zlabel("Z-Axis (mm)")
+ax6_5.set_title("Model 6 C45 5n/5p")
+
+plt.show()
+fig6_5.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 6/C45/Model_6_COR_5N5P.png', dpi = 300)
+
+
+data_4n8, data_4p8, data_5n8, data_5p8= read_file45_3("8")
+fcr8_4, scale8_4, theta8_4 = calculate_FCOR_4n4p(data_4n8, data_4p8)
+fcr8_5, scale8_5, theta8_5 = calculate_FCOR_5n5p(data_5n8, data_5p8)
+print("Scale Values: ", scale8_4)
+print("Angle vals (deg): ", np.rad2deg(theta8_4))
+
+fcr8_4 = np.hstack(fcr8_4) 
+y_vals8_4 = fcr8_4[0, :]
+z_vals8_4 = fcr8_4[1, :]
+print("Y Coords: " , y_vals8_4)
+print("Z Coords: " , z_vals8_4)
+x_vals = np.linspace(0,0, len(y_vals8_4))
+
+fig8_4 = plt.figure(5,figsize=(10,8))
+ax8_4 = fig8_4.add_subplot(111,projection='3d')
+fig8_4.canvas.manager.set_window_title('Model 8 C45 4n/4p')
+ax8_4.scatter(x_vals,y_vals8_4,z_vals8_4, c = 'r', marker = 'o')
+
+offset = 0.01
+for i in range(len(y_vals8_4)):
+    ax8_4.text(
+        x_vals[i], 
+        y_vals8_4[i], 
+        z_vals8_4[i],
+        f"{i}({x_vals[i]:.2f}, {y_vals8_4[i]:.2f}, {z_vals8_4[i]:.2f})",
+        fontsize=8
+    )
+
+ax8_4.set_xlabel("X-Axis (Locked)")
+ax8_4.set_ylabel("Y-Axis (mm)")
+ax8_4.set_zlabel("Z-Axis (mm)")
+ax8_4.set_title("Model 8 C45 4n/4p")
+plt.show()
+fig8_4.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 8/C45/Model_8_COR_4N4P.png', dpi = 300)
+
+fcr8_5 = np.hstack(fcr8_5) 
+x_vals8_5 = fcr8_5[0, :]
+z_vals8_5 = fcr8_5[1, :]
+print("X Coords: " , x_vals8_5)
+print("Z Coords: " , z_vals8_5)
+
+y_vals = np.linspace(0,0, len(x_vals8_5))
+fig8_5 = plt.figure(5,figsize=(10,8))
+ax8_5 = fig8_5.add_subplot(111,projection='3d')
+fig8_5.canvas.manager.set_window_title('Model 8 C45 5n/5p')
+ax8_5.scatter(y_vals,x_vals8_5,z_vals8_5, c = 'r', marker = 'o')
+
+for i in range(len(x_vals8_5)):
+    ax8_5.text(
+        y_vals[i], 
+        x_vals8_5[i], 
+        z_vals8_5[i],
+        f"{i}({x_vals8_5[i]:.2f}, {y_vals[i]:.2f}, {z_vals8_5[i]:.2f})",
+        fontsize=8
+    )
+
+ax8_5.set_xlabel("Y-Axis (locked)")
+ax8_5.set_ylabel("X-Axis (mm)")
+ax8_5.set_zlabel("Z-Axis (mm)")
+ax8_5.set_title("Model 8 C45 5n/5p")
+
+plt.show()
+fig8_5.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 8/C45/Model_8_COR_5N5P.png', dpi = 300)
+
+data_4n9, data_4p9, data_5n9, data_5p9= read_file45_3("9")
+fcr9_4, scale9_4, theta9_4 = calculate_FCOR_4n4p(data_4n9, data_4p9)
+fcr9_5, scale9_5, theta9_5 = calculate_FCOR_5n5p(data_5n9, data_5p9)
+print("Scale Values: ", scale9_4)
+print("Angle vals (deg): ", np.rad2deg(theta9_4))
+
+fcr9_4 = np.hstack(fcr9_4) 
+y_vals9_4 = fcr9_4[0, :]
+z_vals9_4 = fcr9_4[1, :]
+print("Y Coords: " , y_vals9_4)
+print("Z Coords: " , z_vals9_4)
+x_vals = np.linspace(0,0, len(y_vals9_4))
+
+fig9_4 = plt.figure(5,figsize=(10,8))
+ax9_4 = fig9_4.add_subplot(111,projection='3d')
+fig9_4.canvas.manager.set_window_title('Model 9 C45 4n/4p')
+ax9_4.scatter(x_vals,y_vals9_4,z_vals9_4, c = 'r', marker = 'o')
+
+offset = 0.01
+for i in range(len(y_vals9_4)):
+    ax9_4.text(
+        x_vals[i], 
+        y_vals9_4[i], 
+        z_vals9_4[i],
+        f"{i}({x_vals[i]:.2f}, {y_vals9_4[i]:.2f}, {z_vals9_4[i]:.2f})",
+        fontsize=8
+    )
+
+ax9_4.set_xlabel("X-Axis (Locked)")
+ax9_4.set_ylabel("Y-Axis (mm)")
+ax9_4.set_zlabel("Z-Axis (mm)")
+ax9_4.set_title("Model 9 C45 4n/4p")
+plt.show()
+fig9_4.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 9/C45/Model_9_COR_4N4P.png', dpi = 300)
+
+fcr9_5 = np.hstack(fcr9_5) 
+x_vals9_5 = fcr9_5[0, :]
+z_vals9_5 = fcr9_5[1, :]
+print("X Coords: " , x_vals9_5)
+print("Z Coords: " , z_vals9_5)
+
+y_vals = np.linspace(0,0, len(x_vals9_5))
+fig9_5 = plt.figure(5,figsize=(10,8))
+ax9_5 = fig9_5.add_subplot(111,projection='3d')
+fig9_5.canvas.manager.set_window_title('Model 9 C45 5n/5p')
+ax9_5.scatter(y_vals,x_vals9_5,z_vals9_5, c = 'r', marker = 'o')
+
+for i in range(len(x_vals9_5)):
+    ax9_5.text(
+        y_vals[i], 
+        x_vals9_5[i], 
+        z_vals9_5[i],
+        f"{i}({x_vals9_5[i]:.2f}, {y_vals[i]:.2f}, {z_vals9_5[i]:.2f})",
+        fontsize=8
+    )
+
+ax9_5.set_xlabel("Y-Axis (locked)")
+ax9_5.set_ylabel("X-Axis (mm)")
+ax9_5.set_zlabel("Z-Axis (mm)")
+ax9_5.set_title("Model 9 C45 5n/5p")
+
+plt.show()
+fig9_5.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 9/C45/Model_9_COR_5N5P.png', dpi = 300)
+
+
+data_4n10, data_4p10, data_5n10, data_5p10= read_file45_3("10")
+fcr10_4, scale10_4, theta10_4 = calculate_FCOR_4n4p(data_4n10, data_4p10)
+fcr10_5, scale10_5, theta10_5 = calculate_FCOR_5n5p(data_5n10, data_5p10)
+print("Scale Values: ", scale10_4)
+print("Angle vals (deg): ", np.rad2deg(theta10_4))
+
+fcr10_4 = np.hstack(fcr10_4) 
+y_vals10_4 = fcr10_4[0, :]
+z_vals10_4 = fcr10_4[1, :]
+print("Y Coords: " , y_vals10_4)
+print("Z Coords: " , z_vals10_4)
+x_vals = np.linspace(0,0, len(y_vals10_4))
+
+fig10_4 = plt.figure(5,figsize=(10,8))
+ax10_4 = fig10_4.add_subplot(111,projection='3d')
+fig10_4.canvas.manager.set_window_title('Model 10 C45 4n/4p')
+ax10_4.scatter(x_vals,y_vals10_4,z_vals10_4, c = 'r', marker = 'o')
+
+offset = 0.01
+for i in range(len(y_vals10_4)):
+    ax10_4.text(
+        x_vals[i], 
+        y_vals10_4[i], 
+        z_vals10_4[i],
+        f"{i}({x_vals[i]:.2f}, {y_vals10_4[i]:.2f}, {z_vals10_4[i]:.2f})",
+        fontsize=8
+    )
+
+ax10_4.set_xlabel("X-Axis (Locked)")
+ax10_4.set_ylabel("Y-Axis (mm)")
+ax10_4.set_zlabel("Z-Axis (mm)")
+ax10_4.set_title("Model 10 C45 4n/4p")
+plt.show()
+fig10_4.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 10/C45/Model_10_COR_4N4P.png', dpi = 300)
+
+fcr10_5 = np.hstack(fcr10_5) 
+x_vals10_5 = fcr10_5[0, :]
+z_vals10_5 = fcr10_5[1, :]
+print("X Coords: " , x_vals10_5)
+print("Z Coords: " , z_vals10_5)
+
+y_vals = np.linspace(0,0, len(x_vals10_5))
+fig10_5 = plt.figure(5,figsize=(10,8))
+ax10_5 = fig10_5.add_subplot(111,projection='3d')
+fig10_5.canvas.manager.set_window_title('Model 10 C45 5n/5p')
+ax10_5.scatter(y_vals,x_vals10_5,z_vals10_5, c = 'r', marker = 'o')
+
+for i in range(len(x_vals10_5)):
+    ax10_5.text(
+        y_vals[i], 
+        x_vals10_5[i], 
+        z_vals10_5[i],
+        f"{i}({x_vals10_5[i]:.2f}, {y_vals[i]:.2f}, {z_vals8_5[i]:.2f})",
+        fontsize=8
+    )
+
+ax10_5.set_xlabel("Y-Axis (locked)")
+ax10_5.set_ylabel("X-Axis (mm)")
+ax10_5.set_zlabel("Z-Axis (mm)")
+ax10_5.set_title("Model 10 C45 5n/5p")
+
+plt.show()
+fig10_5.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 10/C45/Model_10_COR_5N5P.png', dpi = 300)
+
+data_4n11, data_4p11, data_5n11, data_5p11= read_file45_3("11")
+fcr11_4, scale11_4, theta11_4 = calculate_FCOR_4n4p(data_4n11, data_4p11)
+fcr11_5, scale11_5, theta11_5 = calculate_FCOR_5n5p(data_5n11, data_5p11)
+print("Scale Values: ", scale11_4)
+print("Angle vals (deg): ", np.rad2deg(theta11_4))
+
+fcr11_4 = np.hstack(fcr11_4) 
+y_vals11_4 = fcr11_4[0, :]
+z_vals11_4 = fcr11_4[1, :]
+print("Y Coords: " , y_vals11_4)
+print("Z Coords: " , z_vals11_4)
+x_vals = np.linspace(0,0, len(y_vals11_4))
+
+fig11_4 = plt.figure(5,figsize=(10,8))
+ax11_4 = fig11_4.add_subplot(111,projection='3d')
+fig11_4.canvas.manager.set_window_title('Model 11 C45 4n/4p')
+ax11_4.scatter(x_vals,y_vals11_4,z_vals11_4, c = 'r', marker = 'o')
+
+offset = 0.01
+for i in range(len(y_vals11_4)):
+    ax11_4.text(
+        x_vals[i], 
+        y_vals11_4[i], 
+        z_vals11_4[i],
+        f"{i}({x_vals[i]:.2f}, {y_vals11_4[i]:.2f}, {z_vals11_4[i]:.2f})",
+        fontsize=8
+    )
+
+ax11_4.set_xlabel("X-Axis (Locked)")
+ax11_4.set_ylabel("Y-Axis (mm)")
+ax11_4.set_zlabel("Z-Axis (mm)")
+ax11_4.set_title("Model 11 C45 4n/4p")
+plt.show()
+fig11_4.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 11/C45/Model_11_COR_4N4P.png', dpi = 300)
+
+fcr11_5 = np.hstack(fcr11_5) 
+x_vals11_5 = fcr11_5[0, :]
+z_vals11_5 = fcr11_5[1, :]
+print("X Coords: " , x_vals11_5)
+print("Z Coords: " , z_vals11_5)
+
+y_vals = np.linspace(0,0, len(x_vals11_5))
+fig11_5 = plt.figure(5,figsize=(10,8))
+ax11_5 = fig11_5.add_subplot(111,projection='3d')
+fig11_5.canvas.manager.set_window_title('Model 11 C45 5n/5p')
+ax11_5.scatter(y_vals,x_vals11_5,z_vals11_5, c = 'r', marker = 'o')
+
+for i in range(len(x_vals11_5)):
+    ax11_5.text(
+        y_vals[i], 
+        x_vals11_5[i], 
+        z_vals11_5[i],
+        f"{i}({x_vals11_5[i]:.2f}, {y_vals[i]:.2f}, {z_vals11_5[i]:.2f})",
+        fontsize=8
+    )
+
+ax11_5.set_xlabel("Y-Axis (locked)")
+ax11_5.set_ylabel("X-Axis (mm)")
+ax11_5.set_zlabel("Z-Axis (mm)")
+ax11_5.set_title("Model 11 C45 5n/5p")
+
+plt.show()
+fig11_5.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 11/C45/Model_11_COR_5N5P.png', dpi = 300)
+
+
+data_4n12, data_4p12, data_5n12, data_5p12= read_file45_3("12")
+fcr12_4, scale12_4, theta12_4 = calculate_FCOR_4n4p(data_4n12, data_4p12)
+fcr12_5, scale12_5, theta12_5 = calculate_FCOR_5n5p(data_5n12, data_5p12)
+print("Scale Values: ", scale12_4)
+print("Angle vals (deg): ", np.rad2deg(theta12_4))
+
+fcr12_4 = np.hstack(fcr12_4) 
+y_vals12_4 = fcr12_4[0, :]
+z_vals12_4 = fcr12_4[1, :]
+print("Y Coords: " , y_vals12_4)
+print("Z Coords: " , z_vals12_4)
+x_vals = np.linspace(0,0, len(y_vals12_4))
+
+fig12_4 = plt.figure(5,figsize=(10,8))
+ax12_4 = fig12_4.add_subplot(111,projection='3d')
+fig12_4.canvas.manager.set_window_title('Model 12 C45 4n/4p')
+ax12_4.scatter(x_vals,y_vals12_4,z_vals12_4, c = 'r', marker = 'o')
+
+offset = 0.01
+for i in range(len(y_vals12_4)):
+    ax12_4.text(
+        x_vals[i], 
+        y_vals12_4[i], 
+        z_vals12_4[i],
+        f"{i}({x_vals[i]:.2f}, {y_vals12_4[i]:.2f}, {z_vals12_4[i]:.2f})",
+        fontsize=8
+    )
+
+ax12_4.set_xlabel("X-Axis (Locked)")
+ax12_4.set_ylabel("Y-Axis (mm)")
+ax12_4.set_zlabel("Z-Axis (mm)")
+ax12_4.set_title("Model 12 C45 4n/4p")
+plt.show()
+fig12_4.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 12/C45/Model_12_COR_4N4P.png', dpi = 300)
+
+fcr12_5 = np.hstack(fcr12_5) 
+x_vals12_5 = fcr12_5[0, :]
+z_vals12_5 = fcr12_5[1, :]
+print("X Coords: " , x_vals12_5)
+print("Z Coords: " , z_vals12_5)
+
+y_vals = np.linspace(0,0, len(x_vals12_5))
+fig12_5 = plt.figure(5,figsize=(10,8))
+ax12_5 = fig12_5.add_subplot(111,projection='3d')
+fig12_5.canvas.manager.set_window_title('Model 12 C45 5n/5p')
+ax12_5.scatter(y_vals,x_vals12_5,z_vals12_5, c = 'r', marker = 'o')
+
+for i in range(len(x_vals12_5)):
+    ax12_5.text(
+        y_vals[i], 
+        x_vals12_5[i], 
+        z_vals12_5[i],
+        f"{i}({x_vals12_5[i]:.2f}, {y_vals[i]:.2f}, {z_vals12_5[i]:.2f})",
+        fontsize=8
+    )
+
+ax12_5.set_xlabel("Y-Axis (locked)")
+ax12_5.set_ylabel("X-Axis (mm)")
+ax12_5.set_zlabel("Z-Axis (mm)")
+ax12_5.set_title("Model 12 C45 5n/5p")
+
+plt.show()
+fig12_5.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 12/C45/Model_12_COR_5N5P.png', dpi = 300)
+
+data_4n13, data_4p13, data_5n13, data_5p13= read_file45_3("13")
+fcr13_4, scale13_4, theta13_4 = calculate_FCOR_4n4p(data_4n13, data_4p13)
+fcr13_5, scale13_5, theta13_5 = calculate_FCOR_5n5p(data_5n13, data_5p13)
+print("Scale Values: ", scale13_4)
+print("Angle vals (deg): ", np.rad2deg(theta13_4))
+
+fcr13_4 = np.hstack(fcr13_4) 
+y_vals13_4 = fcr13_4[0, :]
+z_vals13_4 = fcr13_4[1, :]
+print("Y Coords: " , y_vals13_4)
+print("Z Coords: " , z_vals13_4)
+x_vals = np.linspace(0,0, len(y_vals13_4))
+
+fig13_4 = plt.figure(5,figsize=(10,8))
+ax13_4 = fig13_4.add_subplot(111,projection='3d')
+fig13_4.canvas.manager.set_window_title('Model 13 C45 4n/4p')
+ax13_4.scatter(x_vals,y_vals13_4,z_vals13_4, c = 'r', marker = 'o')
+
+offset = 0.01
+for i in range(len(y_vals13_4)):
+    ax13_4.text(
+        x_vals[i], 
+        y_vals13_4[i], 
+        z_vals13_4[i],
+        f"{i}({x_vals[i]:.2f}, {y_vals13_4[i]:.2f}, {z_vals13_4[i]:.2f})",
+        fontsize=8
+    )
+
+ax13_4.set_xlabel("X-Axis (Locked)")
+ax13_4.set_ylabel("Y-Axis (mm)")
+ax13_4.set_zlabel("Z-Axis (mm)")
+ax13_4.set_title("Model 13 C45 4n/4p")
+plt.show()
+fig13_4.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 13/C45/Model_13_COR_4N4P.png', dpi = 300)
+
+fcr13_5 = np.hstack(fcr13_5) 
+x_vals13_5 = fcr13_5[0, :]
+z_vals13_5 = fcr13_5[1, :]
+print("X Coords: " , x_vals13_5)
+print("Z Coords: " , z_vals13_5)
+
+y_vals = np.linspace(0,0, len(x_vals13_5))
+fig13_5 = plt.figure(5,figsize=(10,8))
+ax13_5 = fig13_5.add_subplot(111,projection='3d')
+fig13_5.canvas.manager.set_window_title('Model 13 C45 5n/5p')
+ax13_5.scatter(y_vals,x_vals13_5,z_vals13_5, c = 'r', marker = 'o')
+
+for i in range(len(x_vals13_5)):
+    ax13_5.text(
+        y_vals[i], 
+        x_vals13_5[i], 
+        z_vals13_5[i],
+        f"{i}({x_vals13_5[i]:.2f}, {y_vals[i]:.2f}, {z_vals13_5[i]:.2f})",
+        fontsize=8
+    )
+
+ax13_5.set_xlabel("Y-Axis (locked)")
+ax13_5.set_ylabel("X-Axis (mm)")
+ax13_5.set_zlabel("Z-Axis (mm)")
+ax13_5.set_title("Model 13 C45 5n/5p")
+
+plt.show()
+fig13_5.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 13/C45/Model_13_COR_5N5P.png', dpi = 300)
+
 """
 
 # ------ C3-4 COR Values -------
-
-
 
 data_4n15, data_4p15, data_5n15, data_5p15= read_file34_15("15")
 fcr15_4, scale15_4, theta15_4 = calculate_FCOR_4n4p_C34(data_4n15, data_4p15)
@@ -1202,7 +1778,7 @@ ax15_5.set_title("Model 15 C34 5n/5p")
 
 plt.show()
 fig15_5.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 15/C34/Model_15_COR_5N5P_C34.png', dpi = 300)
-"""
+
 
 data_4n1, data_4p1, data_5n1, data_5p1= read_file34_1("1")
 fcr1_4, scale1_4, theta1_4 = calculate_FCOR_4n4p_C34(data_4n1, data_4p1)
@@ -1529,7 +2105,7 @@ ax14_5.set_title("Model 14 C34 5n/5p")
 plt.show()
 fig14_5.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 14/C34/Model_14_COR_5N5P_C34.png', dpi = 300)
 
-"""
+
 # --- C56 Plots -------
 
 
@@ -1597,7 +2173,7 @@ ax15_5.set_title("Model 15 C56 5n/5p")
 plt.show()
 fig15_5.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 15/C56/Model_15_COR_5N5P_C56.png', dpi = 300)
 
-"""
+
 
 data_4n1, data_4p1, data_5n1, data_5p1= read_file56_15("1")
 fcr1_4, scale1_4, theta1_4 = calculate_FCOR_4n4p_C56(data_4n1, data_4p1)
@@ -1923,4 +2499,3 @@ ax14_5.set_title("Model 14 C56 5n/5p")
 
 plt.show()
 fig14_5.savefig('New_CenterOfRotation/Finite_COR/Plots/Model 14/C56/Model_14_COR_5N5P_C56.png', dpi = 300)
-"""

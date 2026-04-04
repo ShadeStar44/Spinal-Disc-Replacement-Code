@@ -122,7 +122,6 @@ def read_file(model):
 
 
 def stitch_np(pn, pp):
-    """Reverse pn, then append pp without duplicating endpoint"""
     return np.vstack((pn[::-1], pp[1:]))
 
 
@@ -225,14 +224,14 @@ def inscribe_circle_calc(data_n,data_p, LU, LL, RU, RL):
     return areas, radii, centers 
 
 
-def RMSE(areas1, areas2):
+def RMSE(areas1, areas2, model, motion, location):
     difference = np.zeros(len(areas1))
     for i in range(len(areas1)):
         difference[i] = areas1[i] - areas2[i]
 
     RMSE = np.sqrt((1/len(areas1))*np.sum(difference)**2)
 
-    print(RMSE)
+    print(f"Model {model}, {motion}, {location} RMSE: ", RMSE, "\n")
     return RMSE
 
 
@@ -254,7 +253,7 @@ areas6np_15c34R, radii6np_15c34R, centers6np_15c34R = inscribe_circle_calc(data_
 
 
 
-fig15_34, axs = plt.subplots(3, 1, figsize=(10, 13), sharex=True)
+""" fig15_34, axs = plt.subplots(3, 1, figsize=(10, 13), sharex=True)
 
 
 axs[0].plot(t, areas4np_15c34L, label='Left Foramen', color = 'green')
@@ -281,7 +280,7 @@ axs[2].set_ylabel('Area (mm)')
 axs[2].grid(True)
 axs[2].legend()
 
-fig15_34.savefig(f"New_Foramen/Plots/Model 15/Inscr_for_area_15_c34.jpg", dpi = 300)
+fig15_34.savefig(f"New_Foramen/Plots/Model 15/Inscr_for_area_15_c34.jpg", dpi = 300) """
 
     #C45
 areas4np_15c45L, radii4np_15c45L, centers4np_15c45L = inscribe_circle_calc(data_4n15,data_4p15, 52345, 16215, 36615, 37435)
@@ -1125,8 +1124,8 @@ axs[2].set_ylabel('Area (mm)')
 axs[2].grid(True)
 axs[2].legend()
 
-fig7_34.savefig(f"New_Foramen/Plots/Model 7/Inscr_for_area_7_c34.jpg", dpi = 300)
- """
+fig7_34.savefig(f"New_Foramen/Plots/Model 7/Inscr_for_area_7_c34.jpg", dpi = 300) """
+
     #C45
 areas4np_7c45L, radii4np_7c45L, centers4np_7c45L = inscribe_circle_calc(data_4n7,data_4p7, 52345, 16215, 36615, 37435)
 areas5np_7c45L, radii5np_7c45L, centers5np_7c45L = inscribe_circle_calc(data_5n7,data_5p7, 52345, 16215, 36615, 37435)
@@ -1835,8 +1834,8 @@ areas6np_14c34L, radii6np_14c34L, centers6np_14c34L = inscribe_circle_calc(data_
 areas4np_14c34R, radii4np_14c34R, centers4np_14c34R = inscribe_circle_calc(data_4n14,data_4p14, 21922, 4457, 20101, 9037)
 areas5np_14c34R, radii5np_14c34R, centers5np_14c34R = inscribe_circle_calc(data_5n14,data_5p14, 21922, 4457, 20101, 9037)
 areas6np_14c34R, radii6np_14c34R, centers6np_14c34R = inscribe_circle_calc(data_6n14,data_6p14, 21922, 4457, 20101, 9037)
-
-""" fig14_34, axs = plt.subplots(3, 1, figsize=(10, 13), sharex=True)
+"""
+fig14_34, axs = plt.subplots(3, 1, figsize=(10, 13), sharex=True)
 
 
 axs[0].plot(t, areas4np_14c34L, label='Left Foramen', color = 'green')
@@ -1863,7 +1862,7 @@ axs[2].set_ylabel('Area (mm)')
 axs[2].grid(True)
 axs[2].legend()
 
-fig14_34.savefig(f"New_Foramen/Plots/Model 14/Inscr_for_area_14_c34.jpg", dpi = 300) """
+fig14_34.savefig(f"New_Foramen/Plots/Model 14/Inscr_for_area_14_c34.jpg", dpi = 300) """ 
 
     #C45
 areas4np_14c45L, radii4np_14c45L, centers4np_14c45L = inscribe_circle_calc(data_4n14,data_4p14, 52345, 16215, 36615, 37435)
@@ -1944,8 +1943,68 @@ fig14_56.savefig(f"New_Foramen/Plots/Model 14/Inscr_for_area_14_c56.jpg", dpi = 
 plt.show()
  """
 
+plt.show()
 
-RMSE(areas4np_15c34L,areas4np_1c34L)
+RMSE(areas4np_15c34L,areas4np_2c34L, "2", "4N-4P", "Left-C34")
+RMSE(areas5np_15c34L,areas5np_2c34L, "2", "5N-5P", "Left-C34")
+RMSE(areas6np_15c34L,areas6np_2c34L, "2", "6N-6P", "Left-C34")
 
+RMSE(areas4np_15c34R,areas4np_2c34R, "2", "4N-4P", "Right-C34")
+RMSE(areas5np_15c34R,areas5np_2c34R, "2", "5N-5P", "Right-C34")
+RMSE(areas6np_15c34R,areas6np_2c34R, "2", "6N-6P", "Right-C34")
 
+RMSE(areas4np_15c34L,areas4np_6c34L, "6", "4N-4P", "Left-C34")
+RMSE(areas5np_15c34L,areas5np_6c34L, "6", "5N-5P", "Left-C34")
+RMSE(areas6np_15c34L,areas6np_6c34L, "6", "6N-6P", "Left-C34")
 
+RMSE(areas4np_15c34R,areas4np_6c34R, "6", "4N-4P", "Right-C34")
+RMSE(areas5np_15c34R,areas5np_6c34R, "6", "5N-5P", "Right-C34")
+RMSE(areas6np_15c34R,areas6np_6c34R, "6", "6N-6P", "Right-C34")
+
+RMSE(areas4np_15c34L,areas4np_7c34L, "7", "4N-4P", "Left-C34")
+RMSE(areas5np_15c34L,areas5np_7c34L, "7", "5N-5P", "Left-C34")
+RMSE(areas6np_15c34L,areas6np_7c34L, "7", "6N-6P", "Left-C34")
+
+RMSE(areas4np_15c34R,areas4np_7c34R, "7", "4N-4P", "Right-C34")
+RMSE(areas5np_15c34R,areas5np_7c34R, "7", "5N-5P", "Right-C34")
+RMSE(areas6np_15c34R,areas6np_7c34R, "7", "6N-6P", "Right-C34")
+
+RMSE(areas4np_15c34L,areas4np_8c34L, "8", "4N-4P", "Left-C34")
+RMSE(areas5np_15c34L,areas5np_8c34L, "8", "5N-5P", "Left-C34")
+RMSE(areas6np_15c34L,areas6np_8c34L, "8", "6N-6P", "Left-C34")
+
+RMSE(areas4np_15c34R,areas4np_8c34R, "8", "4N-4P", "Right-C34")
+RMSE(areas5np_15c34R,areas5np_8c34R, "8", "5N-5P", "Right-C34")
+RMSE(areas6np_15c34R,areas6np_8c34R, "8", "6N-6P", "Right-C34")
+
+RMSE(areas4np_15c34L,areas4np_9c34L, "9", "4N-4P", "Left-C34")
+RMSE(areas5np_15c34L,areas5np_9c34L, "9", "5N-5P", "Left-C34")
+RMSE(areas6np_15c34L,areas6np_9c34L, "9", "6N-6P", "Left-C34")
+
+RMSE(areas4np_15c34R,areas4np_9c34R, "9", "4N-4P", "Right-C34")
+RMSE(areas5np_15c34R,areas5np_9c34R, "9", "5N-5P", "Right-C34")
+RMSE(areas6np_15c34R,areas6np_9c34R, "9", "6N-6P", "Right-C34")
+
+RMSE(areas4np_15c34L,areas4np_11c34L, "11", "4N-4P", "Left-C34")
+RMSE(areas5np_15c34L,areas5np_11c34L, "11", "5N-5P", "Left-C34")
+RMSE(areas6np_15c34L,areas6np_11c34L, "11", "6N-6P", "Left-C34")
+
+RMSE(areas4np_15c34R,areas4np_11c34R, "11", "4N-4P", "Right-C34")
+RMSE(areas5np_15c34R,areas5np_11c34R, "11", "5N-5P", "Right-C34")
+RMSE(areas6np_15c34R,areas6np_11c34R, "11", "6N-6P", "Right-C34")
+
+RMSE(areas4np_15c34L,areas4np_12c34L, "12", "4N-4P", "Left-C34")
+RMSE(areas5np_15c34L,areas5np_12c34L, "12", "5N-5P", "Left-C34")
+RMSE(areas6np_15c34L,areas6np_12c34L, "12", "6N-6P", "Left-C34")
+
+RMSE(areas4np_15c34R,areas4np_12c34R, "12", "4N-4P", "Right-C34")
+RMSE(areas5np_15c34R,areas5np_12c34R, "12", "5N-5P", "Right-C34")
+RMSE(areas6np_15c34R,areas6np_12c34R, "12", "6N-6P", "Right-C34")
+
+RMSE(areas4np_15c34L,areas4np_13c34L, "13", "4N-4P", "Left-C34")
+RMSE(areas5np_15c34L,areas5np_13c34L, "13", "5N-5P", "Left-C34")
+RMSE(areas6np_15c34L,areas6np_13c34L, "13", "6N-6P", "Left-C34")
+
+RMSE(areas4np_15c34R,areas4np_13c34R, "13", "4N-4P", "Right-C34")
+RMSE(areas5np_15c34R,areas5np_13c34R, "13", "5N-5P", "Right-C34")
+RMSE(areas6np_15c34R,areas6np_13c34R, "13", "6N-6P", "Right-C34")

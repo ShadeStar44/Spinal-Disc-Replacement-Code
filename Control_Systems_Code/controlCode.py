@@ -5,10 +5,15 @@ import _thread
 from machine import Pin, PWM
 
 # ---------------- MOTOR PARAMETERS ----------------
+# X direction
 STEPS_PER_REV = 200
 MICROSTEP = 16
 LEAD = 4  # mm/rev for linear axes
-MAX_LINEAR_SPEED =   23.3 # mm/s
+MAX_LINEAR_SPEED_xA =   23.3 # mm/s in x and angular direction
+# Y direction
+MAX_LINEAR_SPEED_y=   23.3 # mm/s in y direction
+#These are differetn due to differetn motors and ball screws. 
+
 # ---------------- PWM SETUP ----------------
 # ESP32 GPIO mapping (adjust if needed)
 x_pwm = PWM(Pin(14), freq=1000)
@@ -31,24 +36,24 @@ run_state = {
     "running": False,
     "paused": False,
     "current_step": 0,
-    "trajectory": ["motionFile.bin"]
+    "trajectory": ['motionFile.bin'] # Default trajectory file (can be changed via load_trajectory)
 }
 
 DT = 0.01  # 100 Hz loop
 
 # ---------------- UTILITY ----------------
-def set_pwm(pwm, value):
+def set_pwm(pwm, value): # Sets a Constant PWM for a spefic axis 
     """Set PWM duty cycle (0.0 - 1.0)"""
     value = max(0.0, min(1.0, value))
     duty = int(value * PWM_MAX)
     pwm.duty(duty)
 
-def background_loop():
+def background_loop(): # Starts a background thread fro multitasking the control loop
     def loop():
         control_loop()
     _thread.start_new_thread(loop, ())
 # ---------------- TRAJECTORY LOADING ----------------
-def load_trajectory(file_path):
+def load_trajectory(file_path): # For loading in a binary file to path a predetrimined trajectory. The file should be in the format of "vx,vy,vz,va,direction" per line (after the header)
     traj = []
 
     try:
@@ -79,13 +84,14 @@ def load_trajectory(file_path):
 
 
 # ---------------- USER COMMANDS ----------------
-def start():
+def start(): # Starts the control loop and executes the loaded trajectory
     run_state["running"] = True
     run_state["paused"] = False
     print("Started")
 
 
-def stop():
+def stop():# Hard stops the control loop and executes the loaded trajectory. 
+    #Note if you start again it will start from the beginning of the trajectory.
     run_state["running"] = False
     run_state["paused"] = False
     run_state["current_step"] = 0
@@ -97,13 +103,14 @@ def stop():
     print("Stopped")
 
 
-def pause():
+def pause(): # Pauses the control loop but keeps the current trajectory and step. 
+    #You can resume from the same point with resume()
     if run_state["running"]:
         run_state["paused"] = True
         print("Paused")
 
 
-def resume():
+def resume():# Resumes the control loop from a paused state.
     if run_state["running"]:
         run_state["paused"] = False
         print("Resumed")
@@ -111,23 +118,27 @@ def resume():
 
 # ---------------- MANUAL JOG ----------------
 def move_axis(axis, direction, distance_mm):
+    # Moves a specific axis in a specific direction for a specific distance.
+    # This is a blocking call and will not return until the move is complete.
 
     if distance_mm < 0.1:
         print("Minimum move is 0.1 mm")
         return
 
-    speed = 20  # mm/sec (choose a stable value)
+    speed = 20  # mm/sec
 
-    duty = speed / MAX_LINEAR_SPEED
     move_time = distance_mm / speed
 
     dir_pin.value(1 if direction > 0 else 0)
 
     if axis == 'x':
+        duty = speed / MAX_LINEAR_SPEED_xA
         set_pwm(x_pwm, duty)
     elif axis == 'y':
+        duty = speed / MAX_LINEAR_SPEED_y
         set_pwm(y_pwm, duty)
     elif axis == 'a':
+        duty = speed / MAX_LINEAR_SPEED_xA
         set_pwm(a_pwm, duty)
     else:
         print("Invalid axis")

@@ -1,4 +1,4 @@
-# controlCode_NoPCB.py (MicroPython ESP32 version)
+# controlCode_PCB.py (MicroPython ESP32 version)
 # By:Alexander Olson
 # This code runs on the ESP32 microcontroller and handles trajectory execution, IMU data logging
 # The pin allocations in this code ARE the same ones used in on the PCB. 
@@ -116,6 +116,18 @@ def update_encoders():
                 encoder_counts[i] -= 1
 
             encoder_last[i] = state
+def reset_encoders():
+    global encoder_counts, encoder_last
+
+    # Reset counts
+    for i in range(len(encoder_counts)):
+        encoder_counts[i] = 0
+
+    # Re-sync last states to avoid jump on next update
+    for i, (a, b) in enumerate(encoders):
+        encoder_last[i] = (a.value() << 1) | b.value()
+
+    print("Encoders reset")
 def set_pwm(pwm, value): # Sets a Constant PWM for a spefic axis 
     """Set PWM duty cycle (0.0 - 1.0)"""
     value = max(0.0, min(1.0, value))
@@ -381,10 +393,12 @@ def control_loop():
                 set_pwm(a_pwm, va)
                 log_step(loop_start, step_idx, vx, vy, va)
                 run_state["current_step"] += 1
+                update_encoders()
             else:
                 # Move to next trajectory
                 run_state["current_traj"] += 1
                 run_state["current_step"] = 0
+                reset_encoders()
 
                 # End of queue
         if run_state["current_traj"] >= len(tq):
@@ -395,13 +409,14 @@ def control_loop():
                 if run_state["loop_current"] < run_state["loop_count"]:
                     run_state["current_traj"] = 0
                     print("Loop iteration:", run_state["loop_current"])
+                    
                 else:
                     print("All loops complete")
                     stop()
             else:
                 print("All trajectories complete")
                 stop()
-        update_encoders()
+
         # -------- TIMING --------
         elapsed = time.ticks_diff(time.ticks_ms(), loop_start)
         sleep_ms = int(DT * 1000) - elapsed

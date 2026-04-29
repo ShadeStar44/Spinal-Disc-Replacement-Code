@@ -1,5 +1,5 @@
 import time
-import Control_Systems_Code.Control_Code_Versions.controlCode_PCB as controlCode_PCB
+import controlCode as controlCode_PCB
 from machine import Pin, PWM
 import socket
 import builtins
@@ -14,7 +14,7 @@ except Exception as e:
     print("Init error:", e)
 
 # Start control loop in background (REQUIRED now)
-controlCode_PCB.background_loop()
+#controlCode_PCB.background_loop()
 
 
 # -------- REPL COMMAND EXPOSURE --------
@@ -23,7 +23,7 @@ builtins.stop = controlCode_PCB.stop
 builtins.pause = controlCode_PCB.pause
 builtins.resume = controlCode_PCB.resume
 builtins.move_axis = controlCode_PCB.move_axis
-builtins.background_loop = controlCode_PCB.background_loop
+#builtins.background_loop = controlCode_PCB.background_loop
 builtins.load_trajectory = controlCode_PCB.load_trajectory
 builtins.set_pwm = controlCode_PCB.set_pwm
 
@@ -104,7 +104,10 @@ def handle_command(cmd):
         return "ERR: " + str(e)
 
 
-# -------- SOCKET SERVER --------
+# Start control loop in background thread
+#controlCode_PCB.background_loop()
+
+   # -------- SOCKET SERVER --------
 s = socket.socket()
 s.bind(('0.0.0.0', 1234))
 s.listen(1)
@@ -126,4 +129,4 @@ while True:
         print("Connection error:", e)
 
     finally:
-        conn.close()
+        conn.close() 

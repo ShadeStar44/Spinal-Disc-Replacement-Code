@@ -12,7 +12,7 @@ PORT = 1234
 def send_command(cmd):
     try:
         s = socket.socket()
-        s.settimeout(0.3)  # 🔥 VERY IMPORTANT (fast fail)
+        s.settimeout(0.3)  # VERY IMPORTANT (fast fail)
         s.connect((ESP_IP, PORT))
         s.send((cmd + "\n").encode())
         response = s.recv(4096).decode()
@@ -24,7 +24,7 @@ def send_command(cmd):
 def get_queue():
     try:
         s = socket.socket()
-        s.settimeout(0.3)  # 🔥 prevents freezing
+        s.settimeout(0.3)  # prevents freezing
         s.connect((ESP_IP, PORT))
         s.send("get_queue\n".encode())
         response = s.recv(4096).decode()

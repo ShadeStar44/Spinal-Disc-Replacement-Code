@@ -6,9 +6,9 @@ import struct
 
 # ---------------- SETTINGS ----------------
 angular_speed = 5  # deg/sec
-DT = 0.01
+DT = 0.1
 
-RAMP_TIME = 0.5
+RAMP_TIME = 0.2
 
 MAX_PWM = 65535
 MAX_LINEAR_SPEED = 23.3
